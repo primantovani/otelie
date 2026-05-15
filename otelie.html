@@ -1,0 +1,3416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OTELIE Studio — AI Spatial Design</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f8f9fb;
+        --surface: #ffffff;
+        --card: #ffffff;
+        --border: #e5e7eb;
+        --muted: #9ca3af;
+        --sub: #6b7280;
+        --body: #4b5563;
+        --light: #1f2937;
+        --white: #ffffff;
+        --accent: #6366f1;
+        --green: #10b981;
+        --mono: "DM Mono", monospace;
+        --sans: "DM Sans", sans-serif;
+      }
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--bg);
+        color: var(--body);
+        font-family: var(--sans);
+        font-weight: 300;
+        overflow-x: hidden;
+        cursor: none;
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      /* CURSOR */
+      #cur {
+        position: fixed;
+        width: 5px;
+        height: 5px;
+        background: var(--accent);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition:
+          width 0.2s,
+          height 0.2s,
+          opacity 0.2s;
+      }
+      #cur.x {
+        width: 28px;
+        height: 28px;
+        opacity: 0.15;
+      }
+
+      /* NAV */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 40px;
+        height: 60px;
+        border-bottom: 1px solid var(--border);
+        background: rgba(248, 249, 251, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .logo {
+        font-family: var(--sans);
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        color: var(--light);
+        text-decoration: none;
+        cursor: none;
+      }
+      .logo span {
+        color: var(--accent);
+      }
+      .nav-r {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+      }
+      .nav-links {
+        display: flex;
+        gap: 24px;
+        list-style: none;
+      }
+      .nav-links a {
+        font-family: var(--sans);
+        font-size: 13px;
+        letter-spacing: 0.02em;
+        text-transform: none;
+        color: var(--sub);
+        text-decoration: none;
+        transition: color 0.2s;
+        cursor: none;
+        font-weight: 400;
+      }
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: var(--accent);
+        font-weight: 500;
+      }
+      .nav-links a.active {
+        border-bottom: 2px solid var(--accent);
+        padding-bottom: 2px;
+      }
+      .lt {
+        display: flex;
+        border: 1px solid var(--border);
+      }
+      .lb {
+        font-family: var(--mono);
+        font-size: 9px;
+        letter-spacing: 0.14em;
+        background: transparent;
+        border: none;
+        padding: 5px 11px;
+        color: var(--sub);
+        cursor: none;
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+      .lb.on {
+        background: var(--accent);
+        color: #ffffff;
+      }
+
+      /* PAGE SYSTEM */
+      .page {
+        display: none;
+        padding-top: 60px;
+      }
+      .page.active {
+        display: block;
+      }
+
+      /* ── SHARED COMPONENTS ── */
+      .section {
+        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+      }
+      .sec-wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .sec-hd {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        border-bottom: 1px solid var(--border);
+      }
+      .sec-tag {
+        padding: 24px 32px;
+        border-right: 1px solid var(--border);
+        font-family: var(--sans);
+        font-size: 11px;
+        letter-spacing: 0.05em;
+        text-transform: capitalize;
+        color: var(--accent);
+        display: flex;
+        align-items: center;
+        font-weight: 600;
+      }
+      .sec-title {
+        padding: 24px 32px;
+        font-size: 22px;
+        font-weight: 400;
+        color: var(--light);
+      }
+      .sec-title em {
+        font-style: normal;
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .btn-p {
+        font-family: var(--sans);
+        font-size: 13px;
+        letter-spacing: 0.02em;
+        text-transform: none;
+        color: #ffffff;
+        background: var(--accent);
+        padding: 14px 28px;
+        text-decoration: none;
+        transition:
+          background 0.3s,
+          transform 0.2s;
+        cursor: none;
+        display: inline-block;
+        border-radius: 8px;
+        font-weight: 600;
+      }
+      .btn-p:hover {
+        background: #4f46e5;
+        transform: translateY(-2px);
+      }
+      .btn-s {
+        font-family: var(--sans);
+        font-size: 13px;
+        letter-spacing: 0.02em;
+        text-transform: none;
+        color: var(--sub);
+        border: 2px solid var(--border);
+        padding: 12px 22px;
+        text-decoration: none;
+        transition:
+          border-color 0.2s,
+          color 0.2s,
+          background 0.2s;
+        cursor: none;
+        display: inline-block;
+        border-radius: 8px;
+        font-weight: 600;
+      }
+      .btn-s:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        background: rgba(99, 102, 241, 0.05);
+      }
+
+      /* TERM CARD */
+      .term-card {
+        border: 1px solid var(--border);
+        background: var(--surface);
+      }
+      .term-bar {
+        padding: 10px 16px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--card);
+      }
+      .td {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--border);
+      }
+      .tl {
+        font-family: var(--mono);
+        font-size: 8px;
+        letter-spacing: 0.14em;
+        color: var(--muted);
+        margin-left: 6px;
+        text-transform: uppercase;
+      }
+      .term-body {
+        padding: 20px;
+        font-family: var(--mono);
+        font-size: 11px;
+        line-height: 1.85;
+      }
+      .tp {
+        color: var(--muted);
+        margin-bottom: 16px;
+      }
+      .tp .ar {
+        color: var(--accent);
+      }
+      .tr {
+        color: rgba(200, 184, 154, 0.65);
+      }
+      .tr .k {
+        color: var(--accent);
+      }
+      .tc {
+        display: inline-block;
+        width: 6px;
+        height: 12px;
+        background: var(--accent);
+        margin-left: 2px;
+        vertical-align: middle;
+        animation: bl 1s step-end infinite;
+        opacity: 0.7;
+      }
+      @keyframes bl {
+        0%,
+        100% {
+          opacity: 0.7;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* FORM */
+      .form {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      .ff {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .ff label {
+        font-family: var(--sans);
+        font-size: 12px;
+        letter-spacing: 0;
+        text-transform: none;
+        color: var(--light);
+        font-weight: 600;
+      }
+      .ff input,
+      .ff select,
+      .ff textarea {
+        background: var(--surface);
+        border: 2px solid var(--border);
+        padding: 12px 14px;
+        font-family: var(--sans);
+        font-size: 13px;
+        color: var(--light);
+        outline: none;
+        transition:
+          border-color 0.3s,
+          box-shadow 0.3s;
+        border-radius: 8px;
+      }
+      .ff input::placeholder,
+      .ff textarea::placeholder {
+        color: var(--muted);
+      }
+      .ff input:focus,
+      .ff select:focus,
+      .ff textarea:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      }
+      .ff select option {
+        background: var(--surface);
+      }
+      .ff select {
+        cursor: none;
+      }
+      .ff textarea {
+        resize: none;
+        height: 120px;
+      }
+      .fsub {
+        font-family: var(--mono);
+        font-size: 10px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #ffffff;
+        background: var(--accent);
+        border: none;
+        padding: 14px 28px;
+        cursor: none;
+        align-self: flex-start;
+        transition:
+          background 0.3s,
+          transform 0.2s;
+        border-radius: 8px;
+        font-weight: 500;
+      }
+      .fsub:hover {
+        background: #4f46e5;
+        transform: translateY(-2px);
+      }
+
+      /* SOCIAL */
+      .social-links {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
+      .social-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border: 2px solid var(--border);
+        color: var(--sub);
+        text-decoration: none;
+        transition:
+          border-color 0.2s,
+          color 0.2s,
+          background 0.2s;
+        cursor: none;
+        border-radius: 50%;
+      }
+      .social-link:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: rgba(99, 102, 241, 0.05);
+      }
+      .social-link svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+      }
+
+      /* FOOTER */
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--surface);
+        box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .fl {
+        font-family: var(--sans);
+        font-size: 13px;
+        letter-spacing: 0;
+        color: var(--light);
+        font-weight: 600;
+      }
+      .fc {
+        font-family: var(--sans);
+        font-size: 12px;
+        letter-spacing: 0;
+        color: var(--muted);
+      }
+
+      /* ANIM */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+      .reveal {
+        opacity: 0;
+        transform: translateY(20px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ════════════════════════════════
+     PAGE: HOME
+  ════════════════════════════════ */
+      .hero {
+        min-height: calc(100vh - 52px);
+        padding: 80px 40px;
+        display: grid;
+        grid-template-columns: 1fr 460px;
+        gap: 80px;
+        align-items: center;
+        border-bottom: 1px solid var(--border);
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--border);
+        padding: 5px 12px;
+        margin-bottom: 32px;
+      }
+      .badge-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--green);
+        animation: pulse 2s infinite;
+      }
+      .badge-txt {
+        font-family: var(--mono);
+        font-size: 9px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--sub);
+      }
+      h1 {
+        font-size: clamp(36px, 4.5vw, 62px);
+        font-weight: 300;
+        line-height: 1.08;
+        color: var(--light);
+        margin-bottom: 24px;
+        letter-spacing: -0.02em;
+      }
+      h1 strong {
+        font-weight: 500;
+      }
+      h1 .a {
+        color: var(--accent);
+      }
+      .hero-sub {
+        font-size: 15px;
+        line-height: 1.75;
+        color: var(--sub);
+        max-width: 480px;
+        margin-bottom: 40px;
+      }
+      .cta-row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .hero-note {
+        margin-top: 20px;
+        font-family: var(--mono);
+        font-size: 9px;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .step {
+        padding: 36px 28px;
+        border-right: 1px solid var(--border);
+      }
+      .step:last-child {
+        border-right: none;
+      }
+      .step-n {
+        font-family: var(--mono);
+        font-size: 9px;
+        color: var(--muted);
+        margin-bottom: 20px;
+        letter-spacing: 0.1em;
+      }
+      .step-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--light);
+        margin-bottom: 10px;
+      }
+      .step-desc {
+        font-size: 12px;
+        line-height: 1.7;
+        color: var(--sub);
+      }
+      .output-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .out-cell {
+        padding: 32px;
+        border-right: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        transition: background 0.2s;
+      }
+      .out-cell:nth-child(2n) {
+        border-right: none;
+      }
+      .out-cell:nth-last-child(-n + 2) {
+        border-bottom: none;
+      }
+      .out-cell:hover {
+        background: var(--surface);
+      }
+      .out-id {
+        font-family: var(--mono);
+        font-size: 9px;
+        color: var(--muted);
+        margin-bottom: 14px;
+        letter-spacing: 0.1em;
+      }
+      .out-name {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--light);
+        margin-bottom: 8px;
+      }
+      .out-desc {
+        font-size: 12px;
+        line-height: 1.7;
+        color: var(--sub);
+      }
+      .out-spec {
+        margin-top: 12px;
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--accent);
+        line-height: 1.6;
+      }
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .plan {
+        padding: 40px 32px;
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+      }
+      .plan:last-child {
+        border-right: none;
+      }
+      .plan.featured {
+        background: var(--surface);
+      }
+      .plan-tag {
+        font-family: var(--mono);
+        font-size: 8px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 24px;
+      }
+      .plan.featured .plan-tag {
+        color: var(--accent);
+      }
+      .plan-name {
+        font-size: 18px;
+        font-weight: 400;
+        color: var(--light);
+        margin-bottom: 8px;
+      }
+      .plan-price {
+        font-family: var(--mono);
+        font-size: 28px;
+        font-weight: 300;
+        color: var(--light);
+        margin-bottom: 4px;
+      }
+      .plan-price span {
+        font-size: 12px;
+        color: var(--sub);
+      }
+      .plan-desc {
+        font-size: 12px;
+        line-height: 1.7;
+        color: var(--sub);
+        margin-bottom: 28px;
+        padding-bottom: 28px;
+        border-bottom: 1px solid var(--border);
+      }
+      .plan-features {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 32px;
+        flex: 1;
+      }
+      .plan-features li {
+        font-size: 12px;
+        color: var(--sub);
+        display: flex;
+        gap: 10px;
+      }
+      .plan-features li::before {
+        content: "—";
+        color: var(--accent);
+        flex-shrink: 0;
+      }
+      .plan-features li.on {
+        color: var(--body);
+      }
+      .plan-btn {
+        font-family: var(--sans);
+        font-size: 13px;
+        letter-spacing: 0.02em;
+        text-transform: none;
+        text-align: center;
+        padding: 13px;
+        text-decoration: none;
+        transition:
+          background 0.2s,
+          color 0.2s,
+          border-color 0.2s;
+        border: 2px solid var(--border);
+        color: var(--sub);
+        cursor: none;
+        border-radius: 6px;
+        font-weight: 600;
+      }
+      .plan-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: rgba(99, 102, 241, 0.05);
+      }
+      .plan.featured .plan-btn {
+        background: var(--accent);
+        color: #ffffff;
+        border-color: var(--accent);
+      }
+      .plan.featured .plan-btn:hover {
+        background: #4f46e5;
+        border-color: #4f46e5;
+      }
+      .who-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .who-card {
+        padding: 36px 28px;
+        border-right: 1px solid var(--border);
+      }
+      .who-card:last-child {
+        border-right: none;
+      }
+      .who-id {
+        font-family: var(--mono);
+        font-size: 9px;
+        color: var(--muted);
+        margin-bottom: 16px;
+        letter-spacing: 0.1em;
+      }
+      .who-name {
+        font-size: 15px;
+        font-weight: 400;
+        color: var(--light);
+        margin-bottom: 12px;
+      }
+      .who-desc {
+        font-size: 12px;
+        line-height: 1.75;
+        color: var(--sub);
+      }
+      .who-tags {
+        margin-top: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .who-tag {
+        font-family: var(--mono);
+        font-size: 8px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        border: 1px solid var(--border);
+        padding: 3px 8px;
+      }
+      .cta-section {
+        padding: 80px 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 80px;
+        align-items: center;
+      }
+      .cta-title {
+        font-size: clamp(28px, 3vw, 44px);
+        font-weight: 300;
+        color: var(--light);
+        line-height: 1.15;
+        margin-bottom: 16px;
+      }
+      .cta-title em {
+        font-style: normal;
+        color: var(--accent);
+      }
+      .cta-sub {
+        font-size: 13px;
+        line-height: 1.75;
+        color: var(--sub);
+        margin-bottom: 32px;
+      }
+      .cta-email {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--accent);
+        text-decoration: none;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 2px;
+      }
+
+      /* ════════════════════════════════
+     PAGE: PORTFOLIO
+  ════════════════════════════════ */
+      .port-header {
+        padding: 60px 40px 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+        border-bottom: 1px solid var(--border);
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: end;
+        gap: 40px;
+      }
+      .port-title {
+        font-size: clamp(28px, 3.5vw, 48px);
+        font-weight: 300;
+        color: var(--light);
+        line-height: 1.1;
+      }
+      .port-title em {
+        font-style: normal;
+        color: var(--accent);
+      }
+      .port-sub {
+        font-size: 13px;
+        color: var(--sub);
+        margin-top: 12px;
+        max-width: 520px;
+        line-height: 1.7;
+      }
+      .port-filters {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .port-filter {
+        font-family: var(--mono);
+        font-size: 8px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--sub);
+        border: 1px solid var(--border);
+        padding: 5px 12px;
+        background: transparent;
+        cursor: none;
+        transition: all 0.2s;
+      }
+      .port-filter:hover,
+      .port-filter.active {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .port-grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border-left: 1px solid var(--border);
+      }
+      .port-card {
+        border-right: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        cursor: none;
+        transition: background 0.2s;
+        overflow: hidden;
+      }
+      .port-card:hover {
+        background: var(--surface);
+      }
+      .port-card:hover .port-thumb-inner {
+        transform: scale(1.03);
+      }
+      .port-thumb {
+        aspect-ratio: 4/3;
+        overflow: hidden;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+      }
+      .port-thumb-inner {
+        width: 100%;
+        height: 100%;
+        transition: transform 0.5s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .port-thumb svg {
+        width: 100%;
+        height: 100%;
+      }
+      .port-info {
+        padding: 24px 24px 28px;
+      }
+      .port-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .port-id {
+        font-family: var(--mono);
+        font-size: 9px;
+        color: var(--muted);
+        letter-spacing: 0.1em;
+      }
+      .port-type {
+        font-family: var(--mono);
+        font-size: 8px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        border: 1px solid var(--border);
+        padding: 2px 7px;
+      }
+      .port-name {
+        font-size: 15px;
+        font-weight: 400;
+        color: var(--light);
+        margin-bottom: 8px;
+      }
+      .port-loc {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--muted);
+        margin-bottom: 12px;
+      }
+      .port-desc {
+        font-size: 12px;
+        line-height: 1.7;
+        color: var(--sub);
+      }
+      .port-specs {
+        margin-top: 16px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .port-spec {
+        font-family: var(--mono);
+        font-size: 8px;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        border: 1px solid var(--border);
+        padding: 2px 7px;
+      }
+
+      .port-cta {
+        border-top: 1px solid var(--border);
+        padding: 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .port-cta p {
+        font-size: 13px;
+        color: var(--sub);
+      }
+      .port-cta strong {
+        color: var(--light);
+      }
+
+      /* ════════════════════════════════
+     PAGE: ARTICLES
+  ════════════════════════════════ */
+      .art-header {
+        padding: 60px 40px 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+        border-bottom: 1px solid var(--border);
+      }
+      .art-title {
+        font-size: clamp(28px, 3.5vw, 48px);
+        font-weight: 300;
+        color: var(--light);
+        line-height: 1.1;
+      }
+      .art-title em {
+        font-style: normal;
+        color: var(--accent);
+      }
+      .art-sub {
+        font-size: 13px;
+        color: var(--sub);
+        margin-top: 12px;
+        max-width: 520px;
+        line-height: 1.7;
+      }
+
+      .art-featured {
+        max-width: 1200px;
+        margin: 0 auto;
+        border-bottom: 1px solid var(--border);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        cursor: none;
+        transition: background 0.2s;
+      }
+      .art-featured:hover {
+        background: var(--surface);
+      }
+      .art-featured-img {
+        border-right: 1px solid var(--border);
+        aspect-ratio: 16/9;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .art-featured-img svg {
+        width: 100%;
+        height: 100%;
+      }
+      .art-featured-body {
+        padding: 48px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .art-featured-label {
+        font-family: var(--mono);
+        font-size: 8px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 20px;
+      }
+      .art-featured-title {
+        font-size: clamp(20px, 2.5vw, 30px);
+        font-weight: 300;
+        color: var(--light);
+        line-height: 1.25;
+        margin-bottom: 16px;
+      }
+      .art-featured-excerpt {
+        font-size: 13px;
+        line-height: 1.75;
+        color: var(--sub);
+        margin-bottom: 32px;
+      }
+      .art-meta {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+      }
+      .art-date {
+        font-family: var(--mono);
+        font-size: 9px;
+        color: var(--muted);
+      }
+      .art-read {
+        font-family: var(--mono);
+        font-size: 9px;
+        color: var(--muted);
+      }
+      .art-tag {
+        font-family: var(--mono);
+        font-size: 8px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        border: 1px solid var(--border);
+        padding: 2px 8px;
+      }
+
+      .art-grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border-left: 1px solid var(--border);
+      }
+      .art-card {
+        border-right: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        cursor: none;
+        transition: background 0.2s;
+      }
+      .art-card:hover {
+        background: var(--surface);
+      }
+      .art-card-img {
+        aspect-ratio: 16/9;
+        border-bottom: 1px solid var(--border);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .art-card-img svg {
+        width: 100%;
+        height: 100%;
+      }
+      .art-card-body {
+        padding: 24px;
+      }
+      .art-card-tag {
+        font-family: var(--mono);
+        font-size: 8px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 12px;
+      }
+      .art-card-title {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--light);
+        line-height: 1.35;
+        margin-bottom: 10px;
+      }
+      .art-card-excerpt {
+        font-size: 12px;
+        line-height: 1.7;
+        color: var(--sub);
+        margin-bottom: 16px;
+      }
+      .art-card-meta {
+        display: flex;
+        gap: 14px;
+      }
+      .art-card-date {
+        font-family: var(--mono);
+        font-size: 9px;
+        color: var(--muted);
+      }
+      .art-card-read {
+        font-family: var(--mono);
+        font-size: 9px;
+        color: var(--muted);
+      }
+
+      .art-newsletter {
+        border-top: 1px solid var(--border);
+        padding: 48px 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 80px;
+        align-items: center;
+      }
+      .art-nl-title {
+        font-size: 22px;
+        font-weight: 300;
+        color: var(--white);
+        margin-bottom: 10px;
+      }
+      .art-nl-title em {
+        font-style: normal;
+        color: var(--accent);
+      }
+      .art-nl-sub {
+        font-size: 13px;
+        color: var(--sub);
+        line-height: 1.7;
+      }
+      .art-nl-form {
+        display: flex;
+        gap: 0;
+      }
+      .art-nl-form input {
+        flex: 1;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-right: none;
+        padding: 11px 14px;
+        font-family: var(--sans);
+        font-size: 13px;
+        color: var(--light);
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .art-nl-form input::placeholder {
+        color: var(--muted);
+      }
+      .art-nl-form input:focus {
+        border-color: var(--accent);
+      }
+      .art-nl-btn {
+        font-family: var(--sans);
+        font-size: 13px;
+        letter-spacing: 0.02em;
+        text-transform: none;
+        color: #ffffff;
+        background: var(--accent);
+        border: none;
+        padding: 12px 24px;
+        cursor: none;
+        white-space: nowrap;
+        transition:
+          background 0.3s,
+          transform 0.2s;
+        border-radius: 8px;
+        font-weight: 600;
+      }
+      .art-nl-btn:hover {
+        background: #4f46e5;
+        transform: translateY(-2px);
+      }
+
+      /* PHOTOS */
+      .port-thumb-inner img,
+      .art-featured-img img,
+      .art-card-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.5s ease;
+      }
+      .port-thumb-inner {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .art-featured-img,
+      .art-card-img {
+        align-items: stretch;
+      }
+      .port-card:hover .port-thumb-inner img {
+        transform: scale(1.03);
+      }
+
+      /* TESTIMONIALS */
+      .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .testimonial {
+        padding: 44px 32px;
+        border-right: 1px solid var(--border);
+        position: relative;
+      }
+      .testimonial:last-child {
+        border-right: none;
+      }
+      .testimonial-quote {
+        font-size: 14px;
+        line-height: 1.9;
+        color: var(--body);
+        margin-bottom: 28px;
+        font-style: italic;
+        padding-left: 20px;
+        border-left: 2px solid var(--accent);
+      }
+      .testimonial-person {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .testimonial-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--sans);
+        font-size: 16px;
+        font-weight: 500;
+        color: white;
+        flex-shrink: 0;
+      }
+      .testimonial-name {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--light);
+      }
+      .testimonial-role {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--muted);
+        margin-top: 2px;
+        letter-spacing: 0.04em;
+      }
+
+      /* HERO STATS */
+      .hero-stats {
+        display: flex;
+        gap: 32px;
+        margin-top: 28px;
+        padding-top: 24px;
+        border-top: 1px solid var(--border);
+      }
+      .hero-stat-num {
+        font-family: var(--mono);
+        font-size: 20px;
+        color: var(--light);
+        line-height: 1;
+      }
+      .hero-stat-label {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      /* MOBILE */
+      @media (max-width: 768px) {
+        nav {
+          padding: 0 20px;
+        }
+        .nav-links {
+          display: none;
+        }
+        .nav-r {
+          gap: 12px;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+          padding: 60px 20px 40px;
+          gap: 40px;
+          min-height: auto;
+        }
+        .sec-hd {
+          grid-template-columns: 1fr;
+        }
+        .sec-tag {
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        .steps {
+          grid-template-columns: 1fr 1fr;
+        }
+        .step:nth-child(2n) {
+          border-right: none;
+        }
+        .step {
+          border-bottom: 1px solid var(--border);
+        }
+        .output-grid,
+        .who-grid {
+          grid-template-columns: 1fr;
+        }
+        .out-cell,
+        .who-card {
+          border-right: none;
+        }
+        .pricing-grid {
+          grid-template-columns: 1fr;
+        }
+        .plan {
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        .cta-section {
+          grid-template-columns: 1fr;
+          padding: 60px 20px;
+          gap: 48px;
+        }
+        .port-header {
+          grid-template-columns: 1fr;
+          padding: 40px 20px;
+        }
+        .port-grid {
+          grid-template-columns: 1fr;
+        }
+        .art-featured {
+          grid-template-columns: 1fr;
+        }
+        .art-featured-img {
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        .art-grid {
+          grid-template-columns: 1fr;
+        }
+        .art-newsletter {
+          grid-template-columns: 1fr;
+          padding: 40px 20px;
+          gap: 32px;
+        }
+        .port-cta {
+          flex-direction: column;
+          gap: 20px;
+          padding: 40px 20px;
+          align-items: flex-start;
+        }
+        footer {
+          flex-direction: column;
+          gap: 10px;
+          text-align: center;
+          padding: 18px 20px;
+        }
+        body {
+          cursor: auto;
+        }
+        #cur {
+          display: none;
+        }
+        .testimonials-grid {
+          grid-template-columns: 1fr;
+        }
+        .testimonial {
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        .testimonial:last-child {
+          border-bottom: none;
+        }
+        .hero-stats {
+          gap: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="cur"></div>
+
+    <!-- NAV -->
+    <nav>
+      <a href="#" class="logo" onclick="showPage('home', this)"
+        >OTELIE <span>STUDIO</span></a
+      >
+      <div class="nav-r">
+        <ul class="nav-links">
+          <li>
+            <a
+              href="#"
+              data-en="Home"
+              data-pt="Início"
+              onclick="
+                showPage('home', this);
+                return false;
+              "
+              class="active"
+              >Home</a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              data-en="Portfolio"
+              data-pt="Portfólio"
+              onclick="
+                showPage('portfolio', this);
+                return false;
+              "
+              >Portfolio</a
+            >
+          </li>
+          <li>
+            <a
+              href="#"
+              data-en="Articles"
+              data-pt="Artigos"
+              onclick="
+                showPage('articles', this);
+                return false;
+              "
+              >Articles</a
+            >
+          </li>
+          <li>
+            <a href="#how" data-en="How it works" data-pt="Como funciona"
+              >How it works</a
+            >
+          </li>
+          <li>
+            <a href="#pricing" data-en="Pricing" data-pt="Preços">Pricing</a>
+          </li>
+          <li>
+            <a href="#access" data-en="Get access" data-pt="Acesso"
+              >Get access</a
+            >
+          </li>
+        </ul>
+        <div class="lt">
+          <button class="lb on" id="ben" onclick="setLang('en')">EN</button>
+          <button class="lb" id="bpt" onclick="setLang('pt')">PT</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ═══════════ PAGE: HOME ═══════════ -->
+    <div id="page-home" class="page active">
+      <div
+        style="
+          max-width: 1200px;
+          margin: 0 auto;
+          border-left: 1px solid var(--border);
+          border-right: 1px solid var(--border);
+        "
+      >
+        <div class="hero">
+          <div class="hero-left">
+            <div class="hero-badge">
+              <div class="badge-dot"></div>
+              <div
+                class="badge-txt"
+                data-en="Early access open — Cafés & Small Retail"
+                data-pt="Acesso antecipado aberto — Cafés & Varejo Pequeno"
+              >
+                Early access open — Cafés & Small Retail
+              </div>
+            </div>
+            <h1
+              data-en="AI-generated<br>spatial briefs for<br>your <span class='a'>space.</span>"
+              data-pt="Briefings espaciais<br>gerados por IA para<br>o seu <span class='a'>espaço.</span>"
+            >
+              AI-generated<br />spatial briefs for<br />your
+              <span class="a">space.</span>
+            </h1>
+            <p
+              class="hero-sub"
+              data-en="Enter your space details. Get a complete design specification in minutes — lighting, materials, acoustics, and layout — ready to hand to your architect or contractor."
+              data-pt="Insira os dados do seu espaço. Receba uma especificação de design completa em minutos — iluminação, materiais, acústica e layout — pronto para entregar ao seu arquiteto ou construtor."
+            >
+              Enter your space details. Get a complete design specification in
+              minutes — lighting, materials, acoustics, and layout — ready to
+              hand to your architect or contractor.
+            </p>
+            <div class="cta-row">
+              <a
+                href="#access"
+                class="btn-p"
+                data-en="Get early access"
+                data-pt="Obter acesso antecipado"
+                >Get early access</a
+              >
+              <a
+                href="#output"
+                class="btn-s"
+                data-en="See sample output"
+                data-pt="Ver exemplo de saída"
+                >See sample output</a
+              >
+            </div>
+            <p
+              class="hero-note"
+              data-en="No design experience required. Output in PDF + structured data."
+              data-pt="Sem necessidade de experiência em design. Saída em PDF + dados estruturados."
+            >
+              No design experience required. Output in PDF + structured data.
+            </p>
+            <div class="hero-stats">
+              <div>
+                <div class="hero-stat-num">142+</div>
+                <div class="hero-stat-label" data-en="briefs generated" data-pt="briefings gerados">briefs generated</div>
+              </div>
+              <div>
+                <div class="hero-stat-num">89</div>
+                <div class="hero-stat-label" data-en="cafés & stores" data-pt="cafés e lojas">cafés & stores</div>
+              </div>
+              <div>
+                <div class="hero-stat-num">4.9★</div>
+                <div class="hero-stat-label" data-en="avg satisfaction" data-pt="satisfação média">avg satisfaction</div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="hero-right"
+            style="opacity: 0; animation: fadeUp 0.9s ease 0.35s forwards"
+          >
+            <div class="term-card">
+              <div class="term-bar">
+                <div class="td"></div>
+                <div class="td"></div>
+                <div class="td"></div>
+                <div
+                  class="tl"
+                  data-en="OTELIE Studio — generating brief"
+                  data-pt="OTELIE Studio — gerando briefing"
+                >
+                  OTELIE Studio — generating brief
+                </div>
+              </div>
+              <div class="term-body">
+                <div class="tp" id="tp">
+                  <span class="ar">→</span> type: café · area: 85m² · use:
+                  dine-in + takeaway<br />
+                  <span class="ar">→</span> brand: independent · location: urban
+                  ground floor<br />
+                  <span class="ar">→</span>
+                  <span style="color: var(--accent)">generating...</span>
+                </div>
+                <div class="tr" id="tr">
+                  <span class="k">LIGHTING</span><br />
+                  Primary: 2700K pendants, 2.0m hang · Task: 3000K
+                  under-counter<br />
+                  Target: 80 lux ambient, 250 lux counter · No overhead
+                  fluorescent<br /><br />
+                  <span class="k">MATERIALS</span><br />
+                  Walls: NCS S2005-Y20R matte plaster · Floor: poured concrete
+                  or unsealed oak<br />
+                  Counter: aged steel or honed stone · Seating: linen or leather
+                  upholstery<br /><br />
+                  <span class="k">ACOUSTICS</span><br />
+                  Target RT60: 0.55s · Ceiling: acoustic panel or timber
+                  baffle<br />
+                  Floor: 30% rug coverage minimum · No hard parallel surfaces<br /><br />
+                  <span class="k">LAYOUT</span><br />
+                  Entry buffer: 1.8m · Counter: visible from entry · Min aisle:
+                  850mm<br />
+                  Seating density: 1.8m²/cover · Service path separated<br /><br />
+                  <span class="k">STATUS</span> Brief complete · 4 pages · PDF
+                  ready<span class="tc"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HOW -->
+      <section class="section reveal" id="how">
+        <div class="sec-wrap">
+          <div class="sec-hd">
+            <div class="sec-tag" data-en="How it works" data-pt="Como funciona">
+              How it works
+            </div>
+            <div
+              class="sec-title"
+              data-en="Three inputs. One <em>complete specification.</em>"
+              data-pt="Três entradas. Uma <em>especificação completa.</em>"
+            >
+              Three inputs. One <em>complete specification.</em>
+            </div>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-n">STEP_01</div>
+              <div
+                class="step-title"
+                data-en="Describe your space"
+                data-pt="Descreva seu espaço"
+              >
+                Describe your space
+              </div>
+              <div
+                class="step-desc"
+                data-en="Enter type (café, store, bar), floor area, number of covers or fixtures, and location type. Takes under 2 minutes."
+                data-pt="Informe o tipo (café, loja, bar), área em m², número de lugares e tipo de localização. Leva menos de 2 minutos."
+              >
+                Enter type (café, store, bar), floor area, number of covers or
+                fixtures, and location type. Takes under 2 minutes.
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-n">STEP_02</div>
+              <div
+                class="step-title"
+                data-en="Set your parameters"
+                data-pt="Defina seus parâmetros"
+              >
+                Set your parameters
+              </div>
+              <div
+                class="step-desc"
+                data-en="Select budget range, brand style, operational priorities, and any constraints — ceiling height, landlord restrictions, existing fixtures."
+                data-pt="Selecione faixa de orçamento, estilo de marca, prioridades operacionais e restrições — pé-direito, limitações do imóvel, instalações existentes."
+              >
+                Select budget range, brand style, operational priorities, and
+                any constraints.
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-n">STEP_03</div>
+              <div class="step-title" data-en="Generate" data-pt="Gerar">
+                Generate
+              </div>
+              <div
+                class="step-desc"
+                data-en="OTELIE Studio runs your inputs through its spatial design model. Output ready in under 60 seconds."
+                data-pt="O OTELIE Studio processa suas entradas pelo modelo de design espacial. Saída pronta em menos de 60 segundos."
+              >
+                OTELIE Studio runs your inputs through its spatial design model.
+                Output ready in under 60 seconds.
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-n">STEP_04</div>
+              <div
+                class="step-title"
+                data-en="Download & use"
+                data-pt="Baixar e usar"
+              >
+                Download & use
+              </div>
+              <div
+                class="step-desc"
+                data-en="Export as PDF or structured data. Hand directly to your architect, contractor, or fit-out team."
+                data-pt="Exporte em PDF ou dados estruturados. Entregue diretamente ao seu arquiteto ou construtor."
+              >
+                Export as PDF or structured data. Hand directly to your
+                architect, contractor, or fit-out team.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- OUTPUT -->
+      <section class="section reveal" id="output">
+        <div class="sec-wrap">
+          <div class="sec-hd">
+            <div class="sec-tag" data-en="Output" data-pt="Entregáveis">
+              Output
+            </div>
+            <div
+              class="sec-title"
+              data-en="What you get — <em>every time.</em>"
+              data-pt="O que você recebe — <em>sempre.</em>"
+            >
+              What you get — <em>every time.</em>
+            </div>
+          </div>
+          <div class="output-grid">
+            <div class="out-cell">
+              <div class="out-id">01 / lighting</div>
+              <div
+                class="out-name"
+                data-en="Lighting Specification"
+                data-pt="Especificação de Iluminação"
+              >
+                Lighting Specification
+              </div>
+              <div
+                class="out-desc"
+                data-en="Color temperature targets per zone, fixture type recommendations, lux levels, and switching zones. Formatted for electrical contractor."
+                data-pt="Metas de temperatura de cor por zona, recomendações de luminárias, níveis de lux e zonas de controle."
+              >
+                Color temperature targets per zone, fixture type
+                recommendations, lux levels, and switching zones. Formatted for
+                electrical contractor.
+              </div>
+              <div
+                class="out-spec"
+                data-en="e.g. Primary: 2700K / 80 lux · Counter: 3000K / 250 lux"
+                data-pt="ex: Principal: 2700K / 80 lux · Balcão: 3000K / 250 lux"
+              >
+                e.g. Primary: 2700K / 80 lux · Counter: 3000K / 250 lux
+              </div>
+            </div>
+            <div class="out-cell">
+              <div class="out-id">02 / materials</div>
+              <div
+                class="out-name"
+                data-en="Materials Schedule"
+                data-pt="Cronograma de Materiais"
+              >
+                Materials Schedule
+              </div>
+              <div
+                class="out-desc"
+                data-en="Surface-by-surface material specification with NCS color codes, finish types, and supplier category. Budget-tiered options included."
+                data-pt="Especificação superfície por superfície com códigos NCS, tipos de acabamento e categoria de fornecedor."
+              >
+                Surface-by-surface material specification with NCS color codes,
+                finish types, and supplier category.
+              </div>
+              <div
+                class="out-spec"
+                data-en="e.g. Walls: NCS S2005-Y20R matte plaster · Counter: honed stone"
+                data-pt="ex: Paredes: NCS S2005-Y20R gesso fosco · Balcão: pedra polida"
+              >
+                e.g. Walls: NCS S2005-Y20R matte plaster · Counter: honed stone
+              </div>
+            </div>
+            <div class="out-cell">
+              <div class="out-id">03 / acoustics</div>
+              <div
+                class="out-name"
+                data-en="Acoustic Report"
+                data-pt="Relatório Acústico"
+              >
+                Acoustic Report
+              </div>
+              <div
+                class="out-desc"
+                data-en="Reverberation time targets (RT60), treatment recommendations by surface, and noise level benchmarks for your space type."
+                data-pt="Metas de tempo de reverberação (RT60), recomendações por superfície e benchmarks de nível de ruído."
+              >
+                Reverberation time targets (RT60), treatment recommendations by
+                surface, and noise level benchmarks.
+              </div>
+              <div
+                class="out-spec"
+                data-en="e.g. RT60: 0.55s · Ceiling baffles + 30% soft floor · Max SPL: 68dB"
+                data-pt="ex: RT60: 0,55s · Defletores + 30% piso macio · SPL máx: 68dB"
+              >
+                e.g. RT60: 0.55s · Ceiling baffles + 30% soft floor · Max SPL:
+                68dB
+              </div>
+            </div>
+            <div class="out-cell">
+              <div class="out-id">04 / layout</div>
+              <div
+                class="out-name"
+                data-en="Layout Guidelines"
+                data-pt="Diretrizes de Layout"
+              >
+                Layout Guidelines
+              </div>
+              <div
+                class="out-desc"
+                data-en="Circulation widths, zone separation, seating density, counter positioning, and service flow — as numeric specifications."
+                data-pt="Larguras de circulação, separação de zonas, densidade de assentos, posicionamento do balcão e fluxo de serviço."
+              >
+                Circulation widths, zone separation, seating density, counter
+                positioning, and service flow.
+              </div>
+              <div
+                class="out-spec"
+                data-en="e.g. Min aisle: 850mm · Entry buffer: 1.8m · Cover density: 1.8m²/seat"
+                data-pt="ex: Corredor mín: 850mm · Buffer de entrada: 1,8m · 1,8m²/lugar"
+              >
+                e.g. Min aisle: 850mm · Entry buffer: 1.8m · Cover density:
+                1.8m²/seat
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOR WHO -->
+      <section class="section reveal">
+        <div class="sec-wrap">
+          <div class="sec-hd">
+            <div class="sec-tag" data-en="For who" data-pt="Para quem">
+              For who
+            </div>
+            <div
+              class="sec-title"
+              data-en="Built for <em>operators, not designers.</em>"
+              data-pt="Feito para <em>operadores, não designers.</em>"
+            >
+              Built for <em>operators, not designers.</em>
+            </div>
+          </div>
+          <div class="who-grid">
+            <div class="who-card">
+              <div class="who-id">for café owners</div>
+              <div
+                class="who-name"
+                data-en="Café & Coffee Shop Owners"
+                data-pt="Donos de Cafés & Coffee Shops"
+              >
+                Café & Coffee Shop Owners
+              </div>
+              <div
+                class="who-desc"
+                data-en="Opening a first location or expanding. Get a professional design brief without a design consultant fee."
+                data-pt="Abrindo a primeira unidade ou expandindo. Obtenha um briefing profissional sem honorários de consultor."
+              >
+                Opening a first location or expanding. Get a professional design
+                brief without a design consultant fee.
+              </div>
+              <div class="who-tags">
+                <span
+                  class="who-tag"
+                  data-en="New opening"
+                  data-pt="Nova abertura"
+                  >New opening</span
+                ><span class="who-tag" data-en="Refit" data-pt="Reforma"
+                  >Refit</span
+                ><span class="who-tag" data-en="Expansion" data-pt="Expansão"
+                  >Expansion</span
+                >
+              </div>
+            </div>
+            <div class="who-card">
+              <div class="who-id">for retail operators</div>
+              <div
+                class="who-name"
+                data-en="Small Retail Operators"
+                data-pt="Operadores de Varejo Pequeno"
+              >
+                Small Retail Operators
+              </div>
+              <div
+                class="who-desc"
+                data-en="Independent stores, concept shops, and showrooms. Lighting specs, layout guidelines, and materials matched to your brand."
+                data-pt="Lojas independentes, concept stores e showrooms. Specs de iluminação, diretrizes de layout e materiais adequados à sua marca."
+              >
+                Independent stores, concept shops, and showrooms. Lighting
+                specs, layout guidelines, and materials matched to your brand.
+              </div>
+              <div class="who-tags">
+                <span
+                  class="who-tag"
+                  data-en="Concept store"
+                  data-pt="Concept store"
+                  >Concept store</span
+                ><span class="who-tag" data-en="Showroom" data-pt="Showroom"
+                  >Showroom</span
+                ><span class="who-tag" data-en="Pop-up" data-pt="Pop-up"
+                  >Pop-up</span
+                >
+              </div>
+            </div>
+            <div class="who-card">
+              <div class="who-id">for architects</div>
+              <div
+                class="who-name"
+                data-en="Architects & Fit-Out Teams"
+                data-pt="Arquitetos & Equipes de Execução"
+              >
+                Architects & Fit-Out Teams
+              </div>
+              <div
+                class="who-desc"
+                data-en="Accelerate early-stage briefs and client alignment. Generate a structured specification baseline in minutes, then refine with your expertise."
+                data-pt="Acelere briefings iniciais e alinhamento com clientes. Gere uma especificação de base em minutos e refine com sua expertise."
+              >
+                Accelerate early-stage briefs and client alignment. Generate a
+                structured specification baseline in minutes.
+              </div>
+              <div class="who-tags">
+                <span
+                  class="who-tag"
+                  data-en="Brief generation"
+                  data-pt="Geração de briefing"
+                  >Brief generation</span
+                ><span
+                  class="who-tag"
+                  data-en="Client alignment"
+                  data-pt="Alinhamento"
+                  >Client alignment</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TESTIMONIALS -->
+      <section class="section reveal">
+        <div class="sec-wrap">
+          <div class="sec-hd">
+            <div class="sec-tag" data-en="Operators say" data-pt="Operadores dizem">
+              Operators say
+            </div>
+            <div
+              class="sec-title"
+              data-en="Real results from <em>real spaces.</em>"
+              data-pt="Resultados reais de <em>espaços reais.</em>"
+            >
+              Real results from <em>real spaces.</em>
+            </div>
+          </div>
+          <div class="testimonials-grid">
+            <div class="testimonial">
+              <div class="testimonial-quote" data-en="We opened our second café in 3 weeks using the OTELIE brief. The lighting spec alone saved us two rounds of back-and-forth with our contractor." data-pt="Abrimos nosso segundo café em 3 semanas usando o briefing OTELIE. A spec de iluminação sozinha nos poupou duas rodadas de vai-e-vem com nosso construtor.">
+                "We opened our second café in 3 weeks using the OTELIE brief. The lighting spec alone saved us two rounds of back-and-forth with our contractor."
+              </div>
+              <div class="testimonial-person">
+                <div class="testimonial-avatar">A</div>
+                <div>
+                  <div class="testimonial-name">Ana Lima</div>
+                  <div class="testimonial-role">Café Morro · Rio de Janeiro</div>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial">
+              <div class="testimonial-quote" data-en="I had no idea what RT60 meant before OTELIE. Now my store has the acoustic consultant asking what spec I used." data-pt="Não fazia ideia do que era RT60 antes do OTELIE. Agora minha loja tem o consultor acústico perguntando qual spec eu usei.">
+                "I had no idea what RT60 meant before OTELIE. Now my store has the acoustic consultant asking what spec I used."
+              </div>
+              <div class="testimonial-person">
+                <div class="testimonial-avatar" style="background:#10b981">T</div>
+                <div>
+                  <div class="testimonial-name">Tomás Ferreira</div>
+                  <div class="testimonial-role">Sétimo Showroom · Braga</div>
+                </div>
+              </div>
+            </div>
+            <div class="testimonial">
+              <div class="testimonial-quote" data-en="Our architect said the OTELIE brief was more detailed than what clients twice our size bring in. Completely worth it." data-pt="Nosso arquiteto disse que o briefing OTELIE era mais detalhado do que o que clientes do dobro do nosso tamanho trazem. Valeu muito.">
+                "Our architect said the OTELIE brief was more detailed than what clients twice our size bring in. Completely worth it."
+              </div>
+              <div class="testimonial-person">
+                <div class="testimonial-avatar" style="background:#f59e0b">M</div>
+                <div>
+                  <div class="testimonial-name">Marco Oliveira</div>
+                  <div class="testimonial-role">Conceito Verde · São Paulo</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRICING -->
+      <section class="section reveal" id="pricing">
+        <div class="sec-wrap">
+          <div class="sec-hd">
+            <div class="sec-tag" data-en="Pricing" data-pt="Preços">
+              Pricing
+            </div>
+            <div
+              class="sec-title"
+              data-en="Simple pricing. <em>No subscriptions required.</em>"
+              data-pt="Preço simples. <em>Sem assinatura obrigatória.</em>"
+            >
+              Simple pricing. <em>No subscriptions required.</em>
+            </div>
+          </div>
+          <div class="pricing-grid">
+            <div class="plan">
+              <div
+                class="plan-tag"
+                data-en="Pay per brief"
+                data-pt="Pague por briefing"
+              >
+                Pay per brief
+              </div>
+              <div
+                class="plan-name"
+                data-en="Single Brief"
+                data-pt="Briefing Avulso"
+              >
+                Single Brief
+              </div>
+              <div class="plan-price">
+                $57 <span data-en="/ brief" data-pt="/ briefing">/ brief</span>
+              </div>
+              <div
+                class="plan-desc"
+                data-en="One complete specification. No account required."
+                data-pt="Uma especificação completa. Sem conta obrigatória."
+              >
+                One complete specification. No account required.
+              </div>
+              <ul class="plan-features">
+                <li
+                  class="on"
+                  data-en="Full 4-module output"
+                  data-pt="Saída completa com 4 módulos"
+                >
+                  Full 4-module output
+                </li>
+                <li class="on" data-en="PDF export" data-pt="Exportação em PDF">
+                  PDF export
+                </li>
+                <li class="on" data-en="1 revision" data-pt="1 revisão">
+                  1 revision
+                </li>
+                <li
+                  data-en="Structured data export"
+                  data-pt="Exportação de dados estruturados"
+                >
+                  Structured data export
+                </li>
+                <li
+                  data-en="Priority processing"
+                  data-pt="Processamento prioritário"
+                >
+                  Priority processing
+                </li>
+              </ul>
+              <a
+                href="#access"
+                class="plan-btn"
+                data-en="Get started"
+                data-pt="Começar"
+                >Get started</a
+              >
+            </div>
+            <div class="plan featured">
+              <div class="plan-tag" data-en="Most used" data-pt="Mais usado">
+                Most used
+              </div>
+              <div
+                class="plan-name"
+                data-en="Studio Pack"
+                data-pt="Pacote Studio"
+              >
+                Studio Pack
+              </div>
+              <div class="plan-price">
+                $174
+                <span data-en="/ 5 briefs" data-pt="/ 5 briefings"
+                  >/ 5 briefs</span
+                >
+              </div>
+              <div
+                class="plan-desc"
+                data-en="Five briefs for multi-space projects or iterating on a design."
+                data-pt="Cinco briefings para projetos com múltiplos espaços ou iteração de design."
+              >
+                Five briefs for multi-space projects or iterating on a design.
+              </div>
+              <ul class="plan-features">
+                <li
+                  class="on"
+                  data-en="Full 4-module output"
+                  data-pt="Saída completa com 4 módulos"
+                >
+                  Full 4-module output
+                </li>
+                <li class="on" data-en="PDF export" data-pt="Exportação em PDF">
+                  PDF export
+                </li>
+                <li
+                  class="on"
+                  data-en="3 revisions per brief"
+                  data-pt="3 revisões por briefing"
+                >
+                  3 revisions per brief
+                </li>
+                <li
+                  class="on"
+                  data-en="Structured data export"
+                  data-pt="Exportação de dados estruturados"
+                >
+                  Structured data export
+                </li>
+                <li
+                  data-en="Priority processing"
+                  data-pt="Processamento prioritário"
+                >
+                  Priority processing
+                </li>
+              </ul>
+              <a
+                href="#access"
+                class="plan-btn"
+                data-en="Get started"
+                data-pt="Começar"
+                >Get started</a
+              >
+            </div>
+            <div class="plan">
+              <div
+                class="plan-tag"
+                data-en="For teams & architects"
+                data-pt="Para equipes & arquitetos"
+              >
+                For teams & architects
+              </div>
+              <div class="plan-name">Pro</div>
+              <div class="plan-price">
+                $350 <span data-en="/ month" data-pt="/ mês">/ month</span>
+              </div>
+              <div
+                class="plan-desc"
+                data-en="Unlimited briefs, API access, and white-label PDF export."
+                data-pt="Briefings ilimitados, acesso à API e exportação PDF white-label."
+              >
+                Unlimited briefs, API access, and white-label PDF export.
+              </div>
+              <ul class="plan-features">
+                <li
+                  class="on"
+                  data-en="Full 4-module output"
+                  data-pt="Saída completa com 4 módulos"
+                >
+                  Full 4-module output
+                </li>
+                <li
+                  class="on"
+                  data-en="PDF + white-label export"
+                  data-pt="PDF + white-label"
+                >
+                  PDF + white-label export
+                </li>
+                <li
+                  class="on"
+                  data-en="Unlimited revisions"
+                  data-pt="Revisões ilimitadas"
+                >
+                  Unlimited revisions
+                </li>
+                <li
+                  class="on"
+                  data-en="Structured data + API"
+                  data-pt="Dados estruturados + API"
+                >
+                  Structured data + API
+                </li>
+                <li
+                  class="on"
+                  data-en="Priority processing"
+                  data-pt="Processamento prioritário"
+                >
+                  Priority processing
+                </li>
+              </ul>
+              <a
+                href="#access"
+                class="plan-btn"
+                data-en="Get started"
+                data-pt="Começar"
+                >Get started</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACCESS -->
+      <section class="section reveal" id="access">
+        <div class="cta-section">
+          <div>
+            <h2
+              class="cta-title"
+              data-en="Request <em>early access.</em>"
+              data-pt="Solicitar <em>acesso antecipado.</em>"
+            >
+              Request <em>early access.</em>
+            </h2>
+            <p
+              class="cta-sub"
+              data-en="OTELIE Studio is in closed beta. Leave your details and we'll send access within 48 hours. No commitment required."
+              data-pt="O OTELIE Studio está em beta fechado. Deixe seus dados e enviaremos o acesso em até 48 horas. Sem compromisso."
+            >
+              OTELIE Studio is in closed beta. Leave your details and we'll send
+              access within 48 hours. No commitment required.
+            </p>
+            <a href="mailto:studio@otelie.com" class="cta-email"
+              >studio@otelie.com</a
+            >
+          </div>
+          <div class="form">
+            <div class="ff">
+              <label data-en="Name" data-pt="Nome">Name</label
+              ><input
+                type="text"
+                data-placeholder-en="Your name"
+                data-placeholder-pt="Seu nome"
+                placeholder="Your name"
+              />
+            </div>
+            <div class="ff">
+              <label>Email</label
+              ><input type="email" placeholder="your@email.com" />
+            </div>
+            <div class="ff">
+              <label data-en="Space type" data-pt="Tipo de espaço"
+                >Space type</label
+              >
+              <select id="ss">
+                <option
+                  value=""
+                  disabled
+                  selected
+                  data-en="Select"
+                  data-pt="Selecione"
+                >
+                  Select
+                </option>
+                <option
+                  data-en="Café / Coffee shop"
+                  data-pt="Café / Coffee shop"
+                >
+                  Café / Coffee shop
+                </option>
+                <option data-en="Restaurant / Bar" data-pt="Restaurante / Bar">
+                  Restaurant / Bar
+                </option>
+                <option data-en="Retail store" data-pt="Loja de varejo">
+                  Retail store
+                </option>
+                <option
+                  data-en="Concept store / Showroom"
+                  data-pt="Concept store / Showroom"
+                >
+                  Concept store / Showroom
+                </option>
+                <option
+                  data-en="Architect / Designer"
+                  data-pt="Arquiteto / Designer"
+                >
+                  Architect / Designer
+                </option>
+                <option data-en="Other" data-pt="Outro">Other</option>
+              </select>
+            </div>
+            <div class="ff">
+              <label
+                data-en="Anything to add (optional)"
+                data-pt="Algo a acrescentar (opcional)"
+                >Anything to add (optional)</label
+              ><textarea
+                data-placeholder-en="Space size, location, timeline..."
+                data-placeholder-pt="Tamanho do espaço, localização, prazo..."
+                placeholder="Space size, location, timeline..."
+              ></textarea>
+            </div>
+            <button
+              class="fsub"
+              data-en="Request access"
+              data-pt="Solicitar acesso"
+            >
+              Request access
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+    <!-- /page-home -->
+
+    <!-- ═══════════ PAGE: PORTFOLIO ═══════════ -->
+    <div id="page-portfolio" class="page">
+      <div class="port-header">
+        <div>
+          <h2
+            class="port-title"
+            data-en="Portfolio — <em>Selected projects.</em>"
+            data-pt="Portfólio — <em>Projetos selecionados.</em>"
+          >
+            Portfolio — <em>Selected projects.</em>
+          </h2>
+          <p
+            class="port-sub"
+            data-en="Spatial design briefs generated and implemented using OTELIE Studio. Cafés, small restaurants, and retail spaces across Brazil and Europe."
+            data-pt="Briefings de design espacial gerados e implementados com o OTELIE Studio. Cafés, restaurantes pequenos e lojas de varejo no Brasil e Europa."
+          >
+            Spatial design briefs generated and implemented using OTELIE Studio.
+            Cafés, small restaurants, and retail spaces across Brazil and
+            Europe.
+          </p>
+        </div>
+        <div class="port-filters">
+          <button
+            class="port-filter active"
+            data-en="All"
+            data-pt="Todos"
+            onclick="filterPort(this, 'all')"
+          >
+            All
+          </button>
+          <button
+            class="port-filter"
+            data-en="Café"
+            data-pt="Café"
+            onclick="filterPort(this, 'cafe')"
+          >
+            Café
+          </button>
+          <button
+            class="port-filter"
+            data-en="Restaurant"
+            data-pt="Restaurante"
+            onclick="filterPort(this, 'restaurant')"
+          >
+            Restaurant
+          </button>
+          <button
+            class="port-filter"
+            data-en="Retail"
+            data-pt="Varejo"
+            onclick="filterPort(this, 'retail')"
+          >
+            Retail
+          </button>
+        </div>
+      </div>
+
+      <div class="port-grid">
+        <!-- Card 1 -->
+        <div class="port-card" data-cat="cafe">
+          <div class="port-thumb">
+            <div class="port-thumb-inner">
+              <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80&auto=format&fit=crop" alt="Warm café interior with soft lighting, São Paulo" />
+            </div>
+          </div>
+          <div class="port-info">
+            <div class="port-meta">
+              <span class="port-id">PRJ_01</span>
+              <span class="port-type" data-en="Café" data-pt="Café">Café</span>
+            </div>
+            <div
+              class="port-name"
+              data-en="Grão — Specialty Coffee"
+              data-pt="Grão — Café Especial"
+            >
+              Grão — Specialty Coffee
+            </div>
+            <div class="port-loc">São Paulo, BR · 72m²</div>
+            <div
+              class="port-desc"
+              data-en="Full OTELIE Studio brief implemented for a specialty coffee bar in Pinheiros. 40 covers, counter service + dine-in. Lighting and acoustic spec built around a post-industrial aesthetic with warm materials."
+              data-pt="Briefing completo do OTELIE Studio implementado para um coffee bar de especialidade em Pinheiros. 40 lugares, balcão + mesa. Spec de iluminação e acústica desenvolvida em torno de estética pós-industrial com materiais quentes."
+            >
+              Full OTELIE Studio brief implemented for a specialty coffee bar in
+              Pinheiros. 40 covers, counter service + dine-in.
+            </div>
+            <div class="port-specs">
+              <span class="port-spec">2700K</span>
+              <span class="port-spec">RT60: 0.52s</span>
+              <span
+                class="port-spec"
+                data-en="Concrete + Oak"
+                data-pt="Concreto + Carvalho"
+                >Concrete + Oak</span
+              >
+              <span class="port-spec" data-en="$174 plan" data-pt="Plano $174"
+                >$174 plan</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="port-card" data-cat="retail">
+          <div class="port-thumb">
+            <div class="port-thumb-inner">
+              <img src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=800&q=80&auto=format&fit=crop" alt="Minimalist concept store interior, Lisbon" />
+            </div>
+          </div>
+          <div class="port-info">
+            <div class="port-meta">
+              <span class="port-id">PRJ_02</span>
+              <span class="port-type" data-en="Retail" data-pt="Varejo"
+                >Retail</span
+              >
+            </div>
+            <div
+              class="port-name"
+              data-en="Forma — Concept Store"
+              data-pt="Forma — Concept Store"
+            >
+              Forma — Concept Store
+            </div>
+            <div class="port-loc">Lisbon, PT · 95m²</div>
+            <div
+              class="port-desc"
+              data-en="Retail concept store brief for a Portuguese ceramics and homeware brand. Studio brief covered product display lighting, circulation flow for 3 distinct zones, and material specification for wall and floor surfaces."
+              data-pt="Briefing de concept store para uma marca portuguesa de cerâmica e utilidades domésticas. Briefing cobriu iluminação para exposição de produtos, fluxo de circulação para 3 zonas distintas e especificação de materiais."
+            >
+              Retail concept store brief for a Portuguese ceramics and homeware
+              brand. Studio brief covered product display lighting and
+              circulation flow.
+            </div>
+            <div class="port-specs">
+              <span class="port-spec">3000K accent</span>
+              <span class="port-spec">RT60: 0.48s</span>
+              <span
+                class="port-spec"
+                data-en="Plaster + Terrazzo"
+                data-pt="Gesso + Terraço"
+                >Plaster + Terrazzo</span
+              >
+              <span class="port-spec" data-en="$57 plan" data-pt="Plano $57"
+                >$57 plan</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="port-card" data-cat="restaurant">
+          <div class="port-thumb">
+            <div class="port-thumb-inner">
+              <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80&auto=format&fit=crop" alt="Contemporary restaurant with warm atmospheric lighting, Rio" />
+            </div>
+          </div>
+          <div class="port-info">
+            <div class="port-meta">
+              <span class="port-id">PRJ_03</span>
+              <span class="port-type" data-en="Restaurant" data-pt="Restaurante"
+                >Restaurant</span
+              >
+            </div>
+            <div
+              class="port-name"
+              data-en="Brasa — Contemporary Grill"
+              data-pt="Brasa — Grill Contemporâneo"
+            >
+              Brasa — Contemporary Grill
+            </div>
+            <div class="port-loc">Rio de Janeiro, BR · 130m²</div>
+            <div
+              class="port-desc"
+              data-en="Full environment brief for a 60-cover contemporary restaurant. Spec included zone-based lighting for dining vs bar areas, acoustic treatment for a hard-surface heavy fit-out, and kitchen service flow separation."
+              data-pt="Briefing de ambiente completo para restaurante contemporâneo de 60 lugares. Spec incluiu iluminação por zonas para jantar vs bar, tratamento acústico e separação do fluxo de serviço da cozinha."
+            >
+              Full environment brief for a 60-cover contemporary restaurant.
+              Zone-based lighting, acoustic treatment, and service flow
+              separation.
+            </div>
+            <div class="port-specs">
+              <span class="port-spec">2200K–3000K</span>
+              <span class="port-spec">RT60: 0.62s</span>
+              <span
+                class="port-spec"
+                data-en="Steel + Dark Timber"
+                data-pt="Aço + Madeira Escura"
+                >Steel + Dark Timber</span
+              >
+              <span class="port-spec" data-en="$174 plan" data-pt="Plano $174"
+                >$174 plan</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="port-card" data-cat="cafe">
+          <div class="port-thumb">
+            <div class="port-thumb-inner">
+              <img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=800&q=80&auto=format&fit=crop" alt="Cozy neighborhood café with warm interior" />
+            </div>
+          </div>
+          <div class="port-info">
+            <div class="port-meta">
+              <span class="port-id">PRJ_04</span>
+              <span class="port-type" data-en="Café" data-pt="Café">Café</span>
+            </div>
+            <div
+              class="port-name"
+              data-en="Lote — Neighborhood Café"
+              data-pt="Lote — Café de Bairro"
+            >
+              Lote — Neighborhood Café
+            </div>
+            <div class="port-loc">Porto Alegre, BR · 48m²</div>
+            <div
+              class="port-desc"
+              data-en="Compact 24-cover neighborhood café. Single Brief plan used to spec a low-budget fit-out without compromising acoustic or lighting quality. Focused on off-the-shelf materials with professional specification."
+              data-pt="Café de bairro compacto com 24 lugares. Plano Single Brief usado para especificar um fit-out de baixo orçamento sem comprometer a qualidade acústica ou de iluminação."
+            >
+              Compact 24-cover neighborhood café. Single Brief plan used to spec
+              a low-budget fit-out without compromising acoustic or lighting
+              quality.
+            </div>
+            <div class="port-specs">
+              <span class="port-spec">2700K warm</span>
+              <span class="port-spec">RT60: 0.58s</span>
+              <span
+                class="port-spec"
+                data-en="Pine + Plaster"
+                data-pt="Pinho + Gesso"
+                >Pine + Plaster</span
+              >
+              <span class="port-spec" data-en="$57 plan" data-pt="Plano $57"
+                >$57 plan</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="port-card" data-cat="retail">
+          <div class="port-thumb">
+            <div class="port-thumb-inner">
+              <img src="https://images.unsplash.com/photo-1560185007-cde31053f622?w=800&q=80&auto=format&fit=crop" alt="Curated design object store with clean displays, Curitiba" />
+            </div>
+          </div>
+          <div class="port-info">
+            <div class="port-meta">
+              <span class="port-id">PRJ_05</span>
+              <span class="port-type" data-en="Retail" data-pt="Varejo"
+                >Retail</span
+              >
+            </div>
+            <div
+              class="port-name"
+              data-en="Módulo — Design Object Store"
+              data-pt="Módulo — Loja de Objetos de Design"
+            >
+              Módulo — Design Object Store
+            </div>
+            <div class="port-loc">Curitiba, BR · 62m²</div>
+            <div
+              class="port-desc"
+              data-en="Showroom and retail brief for a curated design object store. Emphasis on accent lighting specification for display plinths, minimal acoustic footprint, and materials schedule aligned to a monochrome brand identity."
+              data-pt="Briefing de showroom e varejo para uma loja curada de objetos de design. Ênfase em iluminação de destaque para plinths, pegada acústica mínima e cronograma de materiais alinhado à identidade monocromática da marca."
+            >
+              Showroom and retail brief for a curated design object store.
+              Accent lighting, minimal acoustic footprint.
+            </div>
+            <div class="port-specs">
+              <span class="port-spec">3000K accent</span>
+              <span class="port-spec">RT60: 0.45s</span>
+              <span
+                class="port-spec"
+                data-en="White Plaster + Steel"
+                data-pt="Gesso Branco + Aço"
+                >White Plaster + Steel</span
+              >
+              <span class="port-spec" data-en="$57 plan" data-pt="Plano $57"
+                >$57 plan</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="port-card" data-cat="restaurant">
+          <div class="port-thumb">
+            <div class="port-thumb-inner">
+              <img src="https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=800&q=80&auto=format&fit=crop" alt="Wine bar and kitchen with warm European ambiance, Berlin" />
+            </div>
+          </div>
+          <div class="port-info">
+            <div class="port-meta">
+              <span class="port-id">PRJ_06</span>
+              <span class="port-type" data-en="Restaurant" data-pt="Restaurante"
+                >Restaurant</span
+              >
+            </div>
+            <div
+              class="port-name"
+              data-en="Kammer — Wine Bar & Kitchen"
+              data-pt="Kammer — Wine Bar & Cozinha"
+            >
+              Kammer — Wine Bar & Kitchen
+            </div>
+            <div class="port-loc">Berlin, DE · 85m²</div>
+            <div
+              class="port-desc"
+              data-en="Wine bar and small plates restaurant brief. 35 covers across bar seating and tables. Acoustic spec critical for intimate conversation at high occupancy. Lighting brief specified a warm, gallery-adjacent aesthetic."
+              data-pt="Briefing de wine bar e restaurante de pratos pequenos. 35 lugares entre bar e mesas. Spec acústica crítica para conversação íntima em alta ocupação. Briefing de iluminação especificou estética quente adjacente a galeria."
+            >
+              Wine bar and small plates restaurant. Acoustic spec critical for
+              intimate conversation at high occupancy.
+            </div>
+            <div class="port-specs">
+              <span class="port-spec">2400K warm</span>
+              <span class="port-spec">RT60: 0.50s</span>
+              <span
+                class="port-spec"
+                data-en="Brick + Linen"
+                data-pt="Tijolo + Linho"
+                >Brick + Linen</span
+              >
+              <span class="port-spec" data-en="$174 plan" data-pt="Plano $174"
+                >$174 plan</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="port-cta">
+        <p
+          data-en="<strong>Your project could be here.</strong> Generate a brief and implement it — submit your completed project for portfolio consideration."
+          data-pt="<strong>Seu projeto pode estar aqui.</strong> Gere um briefing e implemente — envie seu projeto concluído para consideração no portfólio."
+        >
+          <strong>Your project could be here.</strong> Generate a brief and
+          implement it — submit your completed project for portfolio
+          consideration.
+        </p>
+        <a
+          href="#access"
+          class="btn-p"
+          onclick="showPage('home')"
+          data-en="Start a brief"
+          data-pt="Iniciar um briefing"
+          >Start a brief</a
+        >
+      </div>
+    </div>
+    <!-- /page-portfolio -->
+
+    <!-- ═══════════ PAGE: ARTICLES ═══════════ -->
+    <div id="page-articles" class="page">
+      <div class="art-header">
+        <h2
+          class="art-title"
+          data-en="Articles — <em>Spatial design intelligence.</em>"
+          data-pt="Artigos — <em>Inteligência em design espacial.</em>"
+        >
+          Articles — <em>Spatial design intelligence.</em>
+        </h2>
+        <p
+          class="art-sub"
+          data-en="Technical and practical writing on spatial design, sensory specification, and AI in commercial interiors. For operators, architects, and designers."
+          data-pt="Textos técnicos e práticos sobre design espacial, especificação sensorial e IA em interiores comerciais. Para operadores, arquitetos e designers."
+        >
+          Technical and practical writing on spatial design, sensory
+          specification, and AI in commercial interiors.
+        </p>
+      </div>
+
+      <!-- Featured article -->
+      <div class="art-featured">
+        <div class="art-featured-img">
+          <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=900&q=80&auto=format&fit=crop" alt="Warm café interior with pendant lighting and people" />
+        </div>
+        <div class="art-featured-body">
+          <div
+            class="art-featured-label"
+            data-en="Featured · Technical"
+            data-pt="Destaque · Técnico"
+          >
+            Featured · Technical
+          </div>
+          <div
+            class="art-featured-title"
+            data-en="Why lighting temperature is the single most impactful variable in café design"
+            data-pt="Por que a temperatura de iluminação é a variável de maior impacto no design de cafés"
+          >
+            Why lighting temperature is the single most impactful variable in
+            café design
+          </div>
+          <div
+            class="art-featured-excerpt"
+            data-en="Most café owners spend their budget on materials and furniture. But the variable that most directly controls how long customers stay, how much they order, and whether they return is one that costs almost nothing to specify correctly: color temperature. Here's the data and the spec."
+            data-pt="A maioria dos donos de cafés gasta seu orçamento em materiais e móveis. Mas a variável que controla diretamente por quanto tempo os clientes ficam, quanto pedem e se voltam é uma que custa quase nada especificar corretamente: a temperatura de cor. Aqui estão os dados e a especificação."
+          >
+            Most café owners spend their budget on materials and furniture. But
+            the variable that most directly controls how long customers stay,
+            how much they order, and whether they return is one that costs
+            almost nothing to specify correctly: color temperature.
+          </div>
+          <div class="art-meta">
+            <span class="art-date" data-en="May 2025" data-pt="Maio 2025"
+              >May 2025</span
+            >
+            <span
+              class="art-read"
+              data-en="8 min read"
+              data-pt="8 min de leitura"
+              >8 min read</span
+            >
+            <span class="art-tag" data-en="Lighting" data-pt="Iluminação"
+              >Lighting</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Article grid -->
+      <div class="art-grid">
+        <div class="art-card">
+          <div class="art-card-img">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80&auto=format&fit=crop" alt="Warm restaurant atmosphere with people" />
+          </div>
+          <div class="art-card-body">
+            <div class="art-card-tag" data-en="Acoustics" data-pt="Acústica">
+              Acoustics
+            </div>
+            <div
+              class="art-card-title"
+              data-en="RT60 targets for small restaurants: what the spec means and how to hit it"
+              data-pt="Metas de RT60 para restaurantes pequenos: o que a especificação significa e como atingi-la"
+            >
+              RT60 targets for small restaurants: what the spec means and how to
+              hit it
+            </div>
+            <div
+              class="art-card-excerpt"
+              data-en="Reverberation time is the most quantifiable acoustic variable in a hospitality space. This is how to read it, set it, and specify treatment to hit it on budget."
+              data-pt="O tempo de reverberação é a variável acústica mais quantificável em um espaço de hospitalidade. Veja como lê-lo, defini-lo e especificar tratamento para atingi-lo dentro do orçamento."
+            >
+              Reverberation time is the most quantifiable acoustic variable in a
+              hospitality space.
+            </div>
+            <div class="art-card-meta">
+              <span class="art-card-date" data-en="Apr 2025" data-pt="Abr 2025"
+                >Apr 2025</span
+              >
+              <span
+                class="art-card-read"
+                data-en="6 min read"
+                data-pt="6 min de leitura"
+                >6 min read</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="art-card">
+          <div class="art-card-img">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80&auto=format&fit=crop" alt="Design materials and surfaces detail" />
+          </div>
+          <div class="art-card-body">
+            <div class="art-card-tag" data-en="Materials" data-pt="Materiais">
+              Materials
+            </div>
+            <div
+              class="art-card-title"
+              data-en="NCS color codes in spatial specification: a practical guide for non-designers"
+              data-pt="Códigos de cor NCS em especificação espacial: guia prático para não designers"
+            >
+              NCS color codes in spatial specification: a practical guide for
+              non-designers
+            </div>
+            <div
+              class="art-card-excerpt"
+              data-en="NCS codes are the standard language of material specification. Here's how to read them, use them in briefs, and communicate them clearly to contractors."
+              data-pt="Códigos NCS são a linguagem padrão de especificação de materiais. Veja como lê-los, usá-los em briefings e comunicá-los claramente aos construtores."
+            >
+              NCS codes are the standard language of material specification.
+              Here's how to read and use them.
+            </div>
+            <div class="art-card-meta">
+              <span class="art-card-date" data-en="Mar 2025" data-pt="Mar 2025"
+                >Mar 2025</span
+              >
+              <span
+                class="art-card-read"
+                data-en="5 min read"
+                data-pt="5 min de leitura"
+                >5 min read</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="art-card">
+          <div class="art-card-img">
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80&auto=format&fit=crop" alt="Restaurant layout and seating arrangement" />
+          </div>
+          <div class="art-card-body">
+            <div class="art-card-tag" data-en="Layout" data-pt="Layout">
+              Layout
+            </div>
+            <div
+              class="art-card-title"
+              data-en="Minimum aisle widths in F&B: the numbers that determine whether your space works"
+              data-pt="Larguras mínimas de corredor em F&B: os números que determinam se seu espaço funciona"
+            >
+              Minimum aisle widths in F&B: the numbers that determine whether
+              your space works
+            </div>
+            <div
+              class="art-card-excerpt"
+              data-en="850mm. 900mm. 1100mm. These numbers govern operational flow in cafés and restaurants. Here's what each means and when to use which."
+              data-pt="850mm. 900mm. 1100mm. Esses números regem o fluxo operacional em cafés e restaurantes. Veja o que cada um significa e quando usar qual."
+            >
+              850mm. 900mm. 1100mm. These numbers govern operational flow in
+              cafés and restaurants.
+            </div>
+            <div class="art-card-meta">
+              <span class="art-card-date" data-en="Feb 2025" data-pt="Fev 2025"
+                >Feb 2025</span
+              >
+              <span
+                class="art-card-read"
+                data-en="4 min read"
+                data-pt="4 min de leitura"
+                >4 min read</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="art-card">
+          <div class="art-card-img">
+            <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=800&q=80&auto=format&fit=crop" alt="People working and discussing in a café space" />
+          </div>
+          <div class="art-card-body">
+            <div
+              class="art-card-tag"
+              data-en="AI + Design"
+              data-pt="IA + Design"
+            >
+              AI + Design
+            </div>
+            <div
+              class="art-card-title"
+              data-en="How OTELIE Studio generates spatial specs: the model, the inputs, the outputs"
+              data-pt="Como o OTELIE Studio gera specs espaciais: o modelo, as entradas, as saídas"
+            >
+              How OTELIE Studio generates spatial specs: the model, the inputs,
+              the outputs
+            </div>
+            <div
+              class="art-card-excerpt"
+              data-en="A transparent look at how the platform works — what data it draws on, how inputs map to outputs, and where human judgment is still required."
+              data-pt="Uma visão transparente de como a plataforma funciona — em quais dados ela se baseia, como as entradas se mapeiam nas saídas e onde o julgamento humano ainda é necessário."
+            >
+              A transparent look at how the platform works and where human
+              judgment is still required.
+            </div>
+            <div class="art-card-meta">
+              <span class="art-card-date" data-en="Jan 2025" data-pt="Jan 2025"
+                >Jan 2025</span
+              >
+              <span
+                class="art-card-read"
+                data-en="7 min read"
+                data-pt="7 min de leitura"
+                >7 min read</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="art-card">
+          <div class="art-card-img">
+            <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=800&q=80&auto=format&fit=crop" alt="Retail store interior with clean product display" />
+          </div>
+          <div class="art-card-body">
+            <div class="art-card-tag" data-en="Retail" data-pt="Varejo">
+              Retail
+            </div>
+            <div
+              class="art-card-title"
+              data-en="Dwell time and conversion: how spatial layout affects sales in small retail"
+              data-pt="Tempo de permanência e conversão: como o layout espacial afeta as vendas no varejo pequeno"
+            >
+              Dwell time and conversion: how spatial layout affects sales in
+              small retail
+            </div>
+            <div
+              class="art-card-excerpt"
+              data-en="Every extra minute a customer spends in your store increases purchase probability by measurable amounts. Here's how layout decisions drive that."
+              data-pt="Cada minuto extra que um cliente passa na sua loja aumenta a probabilidade de compra em valores mensuráveis. Veja como as decisões de layout determinam isso."
+            >
+              Every extra minute in your store increases purchase probability.
+              Here's how layout drives that.
+            </div>
+            <div class="art-card-meta">
+              <span class="art-card-date" data-en="Dec 2024" data-pt="Dez 2024"
+                >Dec 2024</span
+              >
+              <span
+                class="art-card-read"
+                data-en="5 min read"
+                data-pt="5 min de leitura"
+                >5 min read</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="art-card">
+          <div class="art-card-img">
+            <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80&auto=format&fit=crop" alt="Café sensory experience with warm lighting and people" />
+          </div>
+          <div class="art-card-body">
+            <div class="art-card-tag" data-en="Sensory" data-pt="Sensorial">
+              Sensory
+            </div>
+            <div
+              class="art-card-title"
+              data-en="The four sensory variables every café operator should know before fit-out"
+              data-pt="As quatro variáveis sensoriais que todo operador de café deveria conhecer antes do fit-out"
+            >
+              The four sensory variables every café operator should know before
+              fit-out
+            </div>
+            <div
+              class="art-card-excerpt"
+              data-en="Light, sound, material texture, and scent. These four variables determine almost everything about how customers experience your space. Most operators control zero of them intentionally."
+              data-pt="Luz, som, textura de materiais e aroma. Essas quatro variáveis determinam quase tudo sobre como os clientes vivenciam seu espaço. A maioria dos operadores não controla nenhuma delas intencionalmente."
+            >
+              Light, sound, material texture, and scent. These four variables
+              determine almost everything about customer experience.
+            </div>
+            <div class="art-card-meta">
+              <span class="art-card-date" data-en="Nov 2024" data-pt="Nov 2024"
+                >Nov 2024</span
+              >
+              <span
+                class="art-card-read"
+                data-en="6 min read"
+                data-pt="6 min de leitura"
+                >6 min read</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="art-card"
+          onclick="
+            showPage('article-onyx', null);
+            return false;
+          "
+          style="cursor: pointer"
+        >
+          <div class="art-card-img">
+            <img src="./onyx-coffee-lab.jpg" alt="Onyx Coffee Lab interior" />
+          </div>
+          <div class="art-card-body">
+            <div
+              class="art-card-tag"
+              data-en="Case Study"
+              data-pt="Estudo de Caso"
+            >
+              Case Study
+            </div>
+            <div
+              class="art-card-title"
+              data-en="Key Lessons in Spatial Design from Onyx Coffee Lab"
+              data-pt="Lições-chave em Design Espacial do Onyx Coffee Lab"
+            >
+              Key Lessons in Spatial Design from Onyx Coffee Lab
+            </div>
+            <div
+              class="art-card-excerpt"
+              data-en="Recently recognized as the top coffee shop across North America, Central America, and the Caribbean, Onyx Coffee Lab demonstrates how to elevate a brand beyond product through exceptional spatial design and community connection."
+              data-pt="Reconhecido recentemente como a melhor cafeteria da América do Norte, América Central e Caribe, o Onyx Coffee Lab demonstra como elevar uma marca além do produto por meio de design espacial excepcional e conexão comunitária."
+            >
+              Recently recognized as the top coffee shop across North America,
+              Central America, and the Caribbean, Onyx Coffee Lab demonstrates
+              how to elevate a brand through spatial design.
+            </div>
+            <div class="art-card-meta">
+              <span class="art-card-date" data-en="May 2026" data-pt="Mai 2026"
+                >May 2026</span
+              >
+              <span
+                class="art-card-read"
+                data-en="8 min read"
+                data-pt="8 min de leitura"
+                >8 min read</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="art-newsletter">
+        <div>
+          <div
+            class="art-nl-title"
+            data-en="Get new articles <em>in your inbox.</em>"
+            data-pt="Receba novos artigos <em>no seu e-mail.</em>"
+          >
+            Get new articles <em>in your inbox.</em>
+          </div>
+          <p
+            class="art-nl-sub"
+            data-en="One article per month. Spatial design, acoustic and lighting specification, and AI tools for commercial interiors. No marketing."
+            data-pt="Um artigo por mês. Design espacial, especificação acústica e de iluminação e ferramentas de IA para interiores comerciais. Sem marketing."
+          >
+            One article per month. Spatial design, acoustic and lighting
+            specification, and AI tools for commercial interiors. No marketing.
+          </p>
+        </div>
+        <div class="art-nl-form">
+          <input
+            type="email"
+            data-placeholder-en="your@email.com"
+            data-placeholder-pt="seu@email.com"
+            placeholder="your@email.com"
+          />
+          <button class="art-nl-btn" data-en="Subscribe" data-pt="Assinar">
+            Subscribe
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- /page-articles -->
+
+    <!-- ═══════════ PAGE: ARTICLE - ONYX COFFEE ═══════════ -->
+    <div id="page-article-onyx" class="page">
+      <div
+        style="
+          width: 100%;
+          aspect-ratio: 16/9;
+          overflow: hidden;
+          border-bottom: 1px solid var(--border);
+        "
+      >
+        <img
+          src="./onyx-coffee-lab.jpg"
+          alt="Onyx Coffee Lab interior with natural wood and modern design"
+          style="width: 100%; height: 100%; object-fit: cover; display: block"
+        />
+      </div>
+
+      <div
+        style="
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 80px 40px;
+          border-bottom: 1px solid var(--border);
+        "
+      >
+        <div style="margin-bottom: 40px">
+          <span
+            style="
+              font-family: var(--mono);
+              font-size: 9px;
+              color: var(--accent);
+              letter-spacing: 0.16em;
+              text-transform: uppercase;
+            "
+          >
+            Case Study · Featured
+          </span>
+        </div>
+        <h1
+          style="
+            font-size: 48px;
+            font-weight: 300;
+            line-height: 1.2;
+            color: var(--light);
+            margin-bottom: 24px;
+            letter-spacing: -0.02em;
+          "
+        >
+          Key Lessons in Spatial Design from
+          <span style="color: var(--accent)">Onyx Coffee Lab</span>
+        </h1>
+        <div
+          style="
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--muted);
+            letter-spacing: 0.1em;
+          "
+        >
+          <span>May 13, 2026</span>
+          <span>·</span>
+          <span>By Priscila Mantovani, CEO Otelie</span>
+          <span>·</span>
+          <span>8 min read</span>
+        </div>
+      </div>
+
+      <div
+        style="
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 60px 40px;
+          color: var(--body);
+          line-height: 1.8;
+          font-size: 15px;
+        "
+      >
+        <p style="margin-bottom: 24px">
+          Recently recognized as the top coffee shop across North America,
+          Central America, and the Caribbean at the World of Coffee San Diego,
+          Onyx Coffee Lab demonstrates how to elevate a brand beyond its primary
+          product.
+        </p>
+
+        <p style="margin-bottom: 24px">
+          Their philosophy centers on the final stage of the supply chain: the
+          human experience. As they describe it:
+          <span style="color: var(--light); font-style: italic"
+            >"In our cafes, our goal is that you feel welcomed, seen, and heard,
+            and that whatever coffee or pastry you choose fits what you're
+            looking for. It's the service at the very end that completes the
+            supply chain. There's an art to it. We want our cafes to be full of
+            people from our community working, reading, and having
+            conversations."</span
+          >
+        </p>
+
+        <p style="margin-bottom: 32px">
+          This approach perfectly captures how I want to feel as a consumer.
+          Although I haven't visited an Onyx Coffee Lab in person yet, studying
+          their digital content and photography reveals exactly why they are so
+          successful.
+        </p>
+
+        <h2
+          style="
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--light);
+            margin-bottom: 24px;
+            margin-top: 40px;
+          "
+        >
+          Three Pillars of Their Success:
+        </h2>
+
+        <div style="margin-bottom: 32px">
+          <div style="margin-bottom: 20px">
+            <span style="color: var(--accent); font-weight: 500"
+              >Product Excellence</span
+            >
+            <p style="color: var(--body); margin-top: 8px">
+              A commitment to providing the best product through constant
+              improvement.
+            </p>
+          </div>
+
+          <div style="margin-bottom: 20px">
+            <span style="color: var(--accent); font-weight: 500"
+              >Atmosphere and People</span
+            >
+            <p style="color: var(--body); margin-top: 8px">
+              Prioritizing the environment and the individuals within it.
+            </p>
+          </div>
+
+          <div style="margin-bottom: 20px">
+            <span style="color: var(--accent); font-weight: 500"
+              >Community Connection</span
+            >
+            <p style="color: var(--body); margin-top: 8px">
+              Truly understanding and knowing their clientele. Their physical
+              spaces are contemporary and inviting, featuring a sophisticated
+              palette of natural wood, marble patterns, and brown faux leather.
+            </p>
+          </div>
+        </div>
+
+        <div
+          style="
+            margin-top: 60px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border);
+          "
+        >
+          <h3
+            style="
+              font-size: 12px;
+              font-family: var(--mono);
+              letter-spacing: 0.16em;
+              text-transform: uppercase;
+              color: var(--muted);
+              margin-bottom: 16px;
+            "
+          >
+            References
+          </h3>
+          <ul
+            style="
+              list-style: none;
+              color: var(--sub);
+              font-size: 13px;
+              line-height: 1.8;
+            "
+          >
+            <li style="margin-bottom: 10px">
+              <a
+                href="https://onyxcoffeelab.com/pages/our-story"
+                target="_blank"
+                style="
+                  color: var(--accent);
+                  text-decoration: none;
+                  border-bottom: 1px solid var(--border);
+                  padding-bottom: 2px;
+                "
+              >
+                https://onyxcoffeelab.com/pages/our-story
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.instagram.com/onyxcoffeelab/?hl=en"
+                target="_blank"
+                style="
+                  color: var(--accent);
+                  text-decoration: none;
+                  border-bottom: 1px solid var(--border);
+                  padding-bottom: 2px;
+                "
+              >
+                https://www.instagram.com/onyxcoffeelab/?hl=en
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        style="
+          max-width: 800px;
+          margin: 60px auto 0;
+          padding: 40px;
+          border-top: 1px solid var(--border);
+          text-align: center;
+        "
+      >
+        <p style="color: var(--sub); font-size: 13px; margin-bottom: 24px">
+          Enjoy this article? Read more on our
+          <a
+            href="#"
+            onclick="
+              showPage('articles', null);
+              return false;
+            "
+            style="
+              color: var(--accent);
+              text-decoration: none;
+              border-bottom: 1px solid var(--border);
+              padding-bottom: 2px;
+              cursor: none;
+            "
+            >articles page</a
+          >.
+        </p>
+      </div>
+    </div>
+    <!-- /page-article-onyx -->
+
+    <!-- FOOTER (shared) -->
+    <footer>
+      <div class="fl">OTELIE STUDIO</div>
+      <div class="social-links">
+        <a
+          href="https://instagram.com/otelie"
+          target="_blank"
+          class="social-link"
+          aria-label="Instagram"
+          ><svg viewBox="0 0 24 24">
+            <path
+              d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
+            /></svg
+        ></a>
+        <a
+          href="https://linkedin.com/company/otelie"
+          target="_blank"
+          class="social-link"
+          aria-label="LinkedIn"
+          ><svg viewBox="0 0 24 24">
+            <path
+              d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+            /></svg
+        ></a>
+      </div>
+      <div class="fc" data-en="© 2025 OTELIE" data-pt="© 2025 OTELIE">
+        © 2025 OTELIE
+      </div>
+    </footer>
+
+    <script>
+      // CURSOR
+      const cur = document.getElementById("cur");
+      document.addEventListener("mousemove", (e) => {
+        cur.style.left = e.clientX + "px";
+        cur.style.top = e.clientY + "px";
+      });
+      document.addEventListener("click", () => {
+        document
+          .querySelectorAll(
+            "a,button,.out-cell,.who-card,.step,.port-card,.art-card,.art-featured",
+          )
+          .forEach((el) => {
+            el.addEventListener("mouseenter", () => cur.classList.add("x"));
+            el.addEventListener("mouseleave", () => cur.classList.remove("x"));
+          });
+      });
+      document
+        .querySelectorAll(
+          "a,button,.out-cell,.who-card,.step,.port-card,.art-card,.art-featured",
+        )
+        .forEach((el) => {
+          el.addEventListener("mouseenter", () => cur.classList.add("x"));
+          el.addEventListener("mouseleave", () => cur.classList.remove("x"));
+        });
+
+      // REVEAL
+      const revealObs = new IntersectionObserver(
+        (es) =>
+          es.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("visible");
+              revealObs.unobserve(e.target);
+            }
+          }),
+        { threshold: 0.08 },
+      );
+      function observeReveals() {
+        document
+          .querySelectorAll(".reveal:not(.visible)")
+          .forEach((r) => revealObs.observe(r));
+      }
+      observeReveals();
+
+      // PAGE ROUTING
+      function showPage(id, linkEl) {
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById("page-" + id).classList.add("active");
+        document
+          .querySelectorAll(".nav-links a")
+          .forEach((a) => a.classList.remove("active"));
+        if (linkEl) linkEl.classList.add("active");
+        window.scrollTo(0, 0);
+        setTimeout(observeReveals, 100);
+      }
+
+      // PORTFOLIO FILTER
+      function filterPort(btn, cat) {
+        document
+          .querySelectorAll(".port-filter")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        document.querySelectorAll(".port-card").forEach((c) => {
+          c.style.display =
+            cat === "all" || c.dataset.cat === cat ? "block" : "none";
+        });
+      }
+
+      // LANG
+      const TC = {
+        en: {
+          p: `<span class="ar">→</span> type: café · area: 85m² · use: dine-in + takeaway<br><span class="ar">→</span> brand: independent · location: urban ground floor<br><span class="ar">→</span> <span style="color:var(--accent)">generating...</span>`,
+          r: `<span class="k">LIGHTING</span><br>Primary: 2700K pendants, 2.0m hang · Task: 3000K under-counter<br>Target: 80 lux ambient, 250 lux counter · No overhead fluorescent<br><br><span class="k">MATERIALS</span><br>Walls: NCS S2005-Y20R matte plaster · Floor: poured concrete or unsealed oak<br>Counter: aged steel or honed stone · Seating: linen or leather upholstery<br><br><span class="k">ACOUSTICS</span><br>Target RT60: 0.55s · Ceiling: acoustic panel or timber baffle<br>Floor: 30% rug coverage minimum · No hard parallel surfaces<br><br><span class="k">LAYOUT</span><br>Entry buffer: 1.8m · Counter: visible from entry · Min aisle: 850mm<br>Seating density: 1.8m²/cover · Service path separated<br><br><span class="k">STATUS</span> Brief complete · 4 pages · PDF ready<span class="tc"></span>`,
+        },
+        pt: {
+          p: `<span class="ar">→</span> tipo: café · área: 85m² · uso: sentar + viagem<br><span class="ar">→</span> marca: independente · localização: térreo urbano<br><span class="ar">→</span> <span style="color:var(--accent)">gerando...</span>`,
+          r: `<span class="k">ILUMINAÇÃO</span><br>Principal: pendentes 2700K, altura 2,0m · Tarefa: 3000K sob balcão<br>Alvo: 80 lux ambiente, 250 lux balcão · Sem fluorescente de teto<br><br><span class="k">MATERIAIS</span><br>Paredes: NCS S2005-Y20R gesso fosco · Piso: concreto polido ou carvalho natural<br>Balcão: aço envelhecido ou pedra polida · Assentos: linho ou couro<br><br><span class="k">ACÚSTICA</span><br>RT60 alvo: 0,55s · Teto: painel acústico ou defletor de madeira<br>Piso: mínimo 30% de cobertura macia · Sem superfícies paralelas duras<br><br><span class="k">LAYOUT</span><br>Buffer entrada: 1,8m · Balcão: visível da entrada · Corredor mín: 850mm<br>Densidade: 1,8m²/lugar · Circulação de serviço separada<br><br><span class="k">STATUS</span> Briefing completo · 4 páginas · PDF pronto<span class="tc"></span>`,
+        },
+      };
+
+      function setLang(l) {
+        document.getElementById("ben").classList.toggle("on", l === "en");
+        document.getElementById("bpt").classList.toggle("on", l === "pt");
+        document.documentElement.lang = l === "pt" ? "pt-BR" : "en";
+        document.title =
+          l === "pt"
+            ? "OTELIE Studio — Design Espacial com IA"
+            : "OTELIE Studio — AI Spatial Design";
+        document.querySelectorAll("[data-en][data-pt]").forEach((el) => {
+          el.innerHTML = l === "pt" ? el.dataset.pt : el.dataset.en;
+        });
+        document.querySelectorAll("[data-placeholder-en]").forEach((el) => {
+          el.placeholder =
+            l === "pt" ? el.dataset.placeholderPt : el.dataset.placeholderEn;
+        });
+        document.querySelectorAll("#ss option[data-en]").forEach((o) => {
+          o.textContent = l === "pt" ? o.dataset.pt : o.dataset.en;
+        });
+        if (document.getElementById("tp")) {
+          document.getElementById("tp").innerHTML = TC[l].p;
+          document.getElementById("tr").innerHTML = TC[l].r;
+        }
+      }
+    </script>
+  </body>
+</html>
