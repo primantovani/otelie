@@ -29,7 +29,7 @@ async function sendAccessEmails({ name, email, spaceType, notes, brief }) {
 </table>
 ${ownerBriefHtml}`,
   });
-  if (ownerErr) throw new Error(ownerErr.message);
+  if (ownerErr) { console.error('Resend owner error:', JSON.stringify(ownerErr)); throw new Error(ownerErr.message); }
 
   const userBriefHtml = brief
     ? `<p>Here's the spatial design brief we've prepared for your ${esc(spaceType)}:</p>
@@ -61,7 +61,7 @@ async function sendNewsletterEmails({ email }) {
     subject: 'New newsletter subscriber',
     html: `<p>New subscriber: <strong>${email}</strong></p>`,
   });
-  if (ownerErr) throw new Error(ownerErr.message);
+  if (ownerErr) { console.error('Resend newsletter owner error:', JSON.stringify(ownerErr)); throw new Error(ownerErr.message); }
 
   const { error: userErr } = await resend.emails.send({
     from: 'OTELIE Studio <onboarding@resend.dev>',
