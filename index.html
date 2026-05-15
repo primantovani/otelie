@@ -2219,6 +2219,7 @@
             <div class="ff">
               <label data-en="Name" data-pt="Nome">Name</label
               ><input
+                id="f-name"
                 type="text"
                 data-placeholder-en="Your name"
                 data-placeholder-pt="Seu nome"
@@ -2227,7 +2228,7 @@
             </div>
             <div class="ff">
               <label>Email</label
-              ><input type="email" placeholder="your@email.com" />
+              ><input id="f-email" type="email" placeholder="your@email.com" />
             </div>
             <div class="ff">
               <label data-en="Space type" data-pt="Tipo de espaço"
@@ -2276,18 +2277,21 @@
                 data-pt="Algo a acrescentar (opcional)"
                 >Anything to add (optional)</label
               ><textarea
+                id="f-notes"
                 data-placeholder-en="Space size, location, timeline..."
                 data-placeholder-pt="Tamanho do espaço, localização, prazo..."
                 placeholder="Space size, location, timeline..."
               ></textarea>
             </div>
             <button
+              id="f-submit"
               class="fsub"
               data-en="Request access"
               data-pt="Solicitar acesso"
             >
               Request access
             </button>
+            <p id="f-msg" style="margin-top:12px;font-size:13px;min-height:20px"></p>
           </div>
         </div>
       </section>
@@ -3022,15 +3026,17 @@
         </div>
         <div class="art-nl-form">
           <input
+            id="nl-email"
             type="email"
             data-placeholder-en="your@email.com"
             data-placeholder-pt="seu@email.com"
             placeholder="your@email.com"
           />
-          <button class="art-nl-btn" data-en="Subscribe" data-pt="Assinar">
+          <button id="nl-submit" class="art-nl-btn" data-en="Subscribe" data-pt="Assinar">
             Subscribe
           </button>
         </div>
+        <p id="nl-msg" style="margin-top:10px;font-size:13px;min-height:18px"></p>
       </div>
     </div>
     <!-- /page-articles -->
@@ -3411,6 +3417,93 @@
           document.getElementById("tr").innerHTML = TC[l].r;
         }
       }
+
+    // Access form submission
+    document.getElementById('f-submit').addEventListener('click', async () => {
+      const btn = document.getElementById('f-submit');
+      const msg = document.getElementById('f-msg');
+      const name = document.getElementById('f-name').value.trim();
+      const email = document.getElementById('f-email').value.trim();
+      const spaceType = document.getElementById('ss').value;
+      const notes = document.getElementById('f-notes').value.trim();
+      const lang = document.documentElement.lang === 'pt-BR' ? 'pt' : 'en';
+
+      if (!name || !email || !spaceType) {
+        msg.style.color = '#ef4444';
+        msg.textContent = lang === 'pt' ? 'Preencha todos os campos obrigatórios.' : 'Please fill in all required fields.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = lang === 'pt' ? 'Enviando…' : 'Sending…';
+      msg.textContent = '';
+
+      try {
+        const res = await fetch('/api/access', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, spaceType, notes }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          msg.style.color = '#10b981';
+          msg.textContent = lang === 'pt' ? 'Solicitação enviada. Entraremos em contato em até 48h.' : "Request sent. We'll be in touch within 48 hours.";
+          btn.textContent = lang === 'pt' ? '✓ Enviado' : '✓ Sent';
+        } else {
+          msg.style.color = '#ef4444';
+          msg.textContent = data.error || (lang === 'pt' ? 'Algo correu mal. Tente de novo.' : 'Something went wrong. Please try again.');
+          btn.disabled = false;
+          btn.textContent = lang === 'pt' ? 'Solicitar acesso' : 'Request access';
+        }
+      } catch {
+        msg.style.color = '#ef4444';
+        msg.textContent = lang === 'pt' ? 'Erro de rede. Tente de novo.' : 'Network error. Please try again.';
+        btn.disabled = false;
+        btn.textContent = lang === 'pt' ? 'Solicitar acesso' : 'Request access';
+      }
+    });
+
+    // Newsletter form submission
+    document.getElementById('nl-submit').addEventListener('click', async () => {
+      const btn = document.getElementById('nl-submit');
+      const msg = document.getElementById('nl-msg');
+      const email = document.getElementById('nl-email').value.trim();
+      const lang = document.documentElement.lang === 'pt-BR' ? 'pt' : 'en';
+
+      if (!email) {
+        msg.style.color = '#ef4444';
+        msg.textContent = lang === 'pt' ? 'Insira o seu email.' : 'Please enter your email.';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = lang === 'pt' ? 'Enviando…' : 'Sending…';
+      msg.textContent = '';
+
+      try {
+        const res = await fetch('/api/newsletter', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        const data = await res.json();
+        if (res.ok) {
+          msg.style.color = '#10b981';
+          msg.textContent = lang === 'pt' ? 'Inscrito! Até o próximo artigo.' : 'Subscribed! See you next issue.';
+          btn.textContent = lang === 'pt' ? '✓ Inscrito' : '✓ Subscribed';
+        } else {
+          msg.style.color = '#ef4444';
+          msg.textContent = data.error || (lang === 'pt' ? 'Algo correu mal. Tente de novo.' : 'Something went wrong. Please try again.');
+          btn.disabled = false;
+          btn.textContent = lang === 'pt' ? 'Assinar' : 'Subscribe';
+        }
+      } catch {
+        msg.style.color = '#ef4444';
+        msg.textContent = lang === 'pt' ? 'Erro de rede. Tente de novo.' : 'Network error. Please try again.';
+        btn.disabled = false;
+        btn.textContent = lang === 'pt' ? 'Assinar' : 'Subscribe';
+      }
+    });
     </script>
   </body>
 </html>
