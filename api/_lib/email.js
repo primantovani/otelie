@@ -48,7 +48,7 @@ ${userBriefHtml}
 <p style="color:#9ca3af;margin-top:32px">— OTELIE Studio</p>
 </div>`,
   });
-  if (userErr) throw new Error(userErr.message);
+  if (userErr) console.error('Resend user email error (domain not verified):', userErr.message);
 }
 
 async function sendNewsletterEmails({ email }) {
@@ -73,7 +73,7 @@ async function sendNewsletterEmails({ email }) {
 <p style="color:#9ca3af;margin-top:32px">— OTELIE Studio</p>
 </div>`,
   });
-  if (userErr) throw new Error(userErr.message);
+  if (userErr) console.error('Resend newsletter user email error (domain not verified):', userErr.message);
 }
 
 module.exports = { sendAccessEmails, sendNewsletterEmails };
