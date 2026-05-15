@@ -1,0 +1,6 @@
+{
+  "functions": {
+    "api/access.js": { "maxDuration": 60 },
+    "api/newsletter.js": { "maxDuration": 10 }
+  }
+}
