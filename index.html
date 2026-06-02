@@ -41,31 +41,11 @@
         font-family: var(--sans);
         font-weight: 300;
         overflow-x: hidden;
-        cursor: none;
+
         font-size: 15px;
         line-height: 1.7;
       }
 
-      /* CURSOR */
-      #cur {
-        position: fixed;
-        width: 5px;
-        height: 5px;
-        background: var(--accent);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 9999;
-        transform: translate(-50%, -50%);
-        transition:
-          width 0.2s,
-          height 0.2s,
-          opacity 0.2s;
-      }
-      #cur.x {
-        width: 28px;
-        height: 28px;
-        opacity: 0.15;
-      }
 
       /* NAV */
       nav {
@@ -91,7 +71,7 @@
         letter-spacing: 0.05em;
         color: var(--light);
         text-decoration: none;
-        cursor: none;
+
       }
       .logo span {
         color: var(--accent);
@@ -114,7 +94,7 @@
         color: var(--sub);
         text-decoration: none;
         transition: color 0.2s;
-        cursor: none;
+
         font-weight: 400;
       }
       .nav-links a:hover,
@@ -138,7 +118,7 @@
         border: none;
         padding: 5px 11px;
         color: var(--sub);
-        cursor: none;
+
         transition:
           background 0.2s,
           color 0.2s;
@@ -207,7 +187,7 @@
         transition:
           background 0.3s,
           transform 0.2s;
-        cursor: none;
+
         display: inline-block;
         border-radius: 8px;
         font-weight: 600;
@@ -229,7 +209,7 @@
           border-color 0.2s,
           color 0.2s,
           background 0.2s;
-        cursor: none;
+
         display: inline-block;
         border-radius: 8px;
         font-weight: 600;
@@ -354,7 +334,7 @@
         background: var(--surface);
       }
       .ff select {
-        cursor: none;
+
       }
       .ff textarea {
         resize: none;
@@ -369,7 +349,7 @@
         background: var(--accent);
         border: none;
         padding: 14px 28px;
-        cursor: none;
+
         align-self: flex-start;
         transition:
           background 0.3s,
@@ -401,7 +381,7 @@
           border-color 0.2s,
           color 0.2s,
           background 0.2s;
-        cursor: none;
+
         border-radius: 50%;
       }
       .social-link:hover {
@@ -702,7 +682,7 @@
           border-color 0.2s;
         border: 2px solid var(--border);
         color: var(--sub);
-        cursor: none;
+
         border-radius: 6px;
         font-weight: 600;
       }
@@ -843,7 +823,7 @@
         border: 1px solid var(--border);
         padding: 5px 12px;
         background: transparent;
-        cursor: none;
+
         transition: all 0.2s;
       }
       .port-filter:hover,
@@ -862,7 +842,7 @@
       .port-card {
         border-right: 1px solid var(--border);
         border-bottom: 1px solid var(--border);
-        cursor: none;
+
         transition: background 0.2s;
         overflow: hidden;
       }
@@ -996,7 +976,7 @@
         border-bottom: 1px solid var(--border);
         display: grid;
         grid-template-columns: 1fr 1fr;
-        cursor: none;
+
         transition: background 0.2s;
       }
       .art-featured:hover {
@@ -1076,7 +1056,7 @@
       .art-card {
         border-right: 1px solid var(--border);
         border-bottom: 1px solid var(--border);
-        cursor: none;
+
         transition: background 0.2s;
       }
       .art-card:hover {
@@ -1189,7 +1169,7 @@
         background: var(--accent);
         border: none;
         padding: 12px 24px;
-        cursor: none;
+
         white-space: nowrap;
         transition:
           background 0.3s,
@@ -1386,12 +1366,7 @@
           text-align: center;
           padding: 18px 20px;
         }
-        body {
-          cursor: auto;
-        }
-        #cur {
-          display: none;
-        }
+
         .testimonials-grid {
           grid-template-columns: 1fr;
         }
@@ -1409,7 +1384,6 @@
     </style>
   </head>
   <body>
-    <div id="cur"></div>
 
     <!-- NAV -->
     <nav>
@@ -3273,7 +3247,7 @@
               text-decoration: none;
               border-bottom: 1px solid var(--border);
               padding-bottom: 2px;
-              cursor: none;
+      
             "
             >articles page</a
           >.
@@ -3313,30 +3287,6 @@
     </footer>
 
     <script>
-      // CURSOR
-      const cur = document.getElementById("cur");
-      document.addEventListener("mousemove", (e) => {
-        cur.style.left = e.clientX + "px";
-        cur.style.top = e.clientY + "px";
-      });
-      document.addEventListener("click", () => {
-        document
-          .querySelectorAll(
-            "a,button,.out-cell,.who-card,.step,.port-card,.art-card,.art-featured",
-          )
-          .forEach((el) => {
-            el.addEventListener("mouseenter", () => cur.classList.add("x"));
-            el.addEventListener("mouseleave", () => cur.classList.remove("x"));
-          });
-      });
-      document
-        .querySelectorAll(
-          "a,button,.out-cell,.who-card,.step,.port-card,.art-card,.art-featured",
-        )
-        .forEach((el) => {
-          el.addEventListener("mouseenter", () => cur.classList.add("x"));
-          el.addEventListener("mouseleave", () => cur.classList.remove("x"));
-        });
 
       // REVEAL
       const revealObs = new IntersectionObserver(
