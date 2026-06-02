@@ -17,7 +17,7 @@ async function sendAccessEmails({ name, email, spaceType, notes, brief }) {
     : `<p style="color:#ef4444"><em>Brief generation failed — send manually within 24h.</em></p>`;
 
   const { error: ownerErr } = await resend.emails.send({
-    from: 'OTELIE Studio <onboarding@resend.dev>',
+    from: 'OTELIE Studio <studio@otelie.design>',
     to: owner,
     subject: `New access request — ${esc(name)}`,
     html: `<h2>New access request</h2>
@@ -37,7 +37,7 @@ ${ownerBriefHtml}`,
     : `<p>Your custom spatial design brief will be sent to you within 24 hours.</p>`;
 
   const { error: userErr } = await resend.emails.send({
-    from: 'OTELIE Studio <onboarding@resend.dev>',
+    from: 'OTELIE Studio <studio@otelie.design>',
     to: email,
     subject: 'OTELIE Studio — Access request received',
     html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#374151">
@@ -56,7 +56,7 @@ async function sendNewsletterEmails({ email }) {
   const owner = process.env.OWNER_EMAIL || 'studio@otelie.com';
 
   const { error: ownerErr } = await resend.emails.send({
-    from: 'OTELIE Studio <onboarding@resend.dev>',
+    from: 'OTELIE Studio <studio@otelie.design>',
     to: owner,
     subject: 'New newsletter subscriber',
     html: `<p>New subscriber: <strong>${email}</strong></p>`,
@@ -64,7 +64,7 @@ async function sendNewsletterEmails({ email }) {
   if (ownerErr) { console.error('Resend newsletter owner error:', JSON.stringify(ownerErr)); throw new Error(ownerErr.message); }
 
   const { error: userErr } = await resend.emails.send({
-    from: 'OTELIE Studio <onboarding@resend.dev>',
+    from: 'OTELIE Studio <studio@otelie.design>',
     to: email,
     subject: "OTELIE Studio — You're subscribed",
     html: `<div style="font-family:sans-serif;max-width:600px;margin:0 auto;color:#374151">
