@@ -3,27 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OTELIE Studio — AI Spatial Design</title>
+    <title>OTELIE Studio, AI Spatial Design</title>
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
     <style>
       :root {
-        --bg: #f8f9fb;
+        --bg: #ffffff;
         --surface: #ffffff;
         --card: #ffffff;
-        --border: #e5e7eb;
+        --border: #e8e4db;
         --muted: #9ca3af;
         --sub: #6b7280;
-        --body: #4b5563;
-        --light: #1f2937;
+        --body: #374151;
+        --light: #1a1a1a;
         --white: #ffffff;
-        --accent: #6366f1;
+        --accent: #D1A23A;
+        --accent-dark: #a07d2e;
         --green: #10b981;
-        --mono: "DM Mono", monospace;
-        --sans: "DM Sans", sans-serif;
+        --mono: "Inter", monospace;
+        --sans: "Nunito", sans-serif;
       }
       *,
       *::before,
@@ -39,11 +41,13 @@
         background: var(--bg);
         color: var(--body);
         font-family: var(--sans);
-        font-weight: 300;
+        font-weight: 400;
         overflow-x: hidden;
 
         font-size: 15px;
         line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
 
 
@@ -54,27 +58,35 @@
         left: 0;
         right: 0;
         z-index: 100;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 40px;
         height: 60px;
         border-bottom: 1px solid var(--border);
-        background: rgba(248, 249, 251, 0.95);
+        background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       }
+      .nav-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 40px;
+        height: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
       .logo {
-        font-family: var(--sans);
-        font-size: 14px;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        color: var(--light);
+        display: flex;
+        align-items: center;
+        gap: 10px;
         text-decoration: none;
 
       }
-      .logo span {
-        color: var(--accent);
+      .logo-wordmark {
+        font-family: var(--sans);
+        font-size: 1.7rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: var(--light);
+        line-height: 1;
       }
       .nav-r {
         display: flex;
@@ -152,7 +164,7 @@
         border-bottom: 1px solid var(--border);
       }
       .sec-tag {
-        padding: 24px 32px;
+        padding: 24px 40px;
         border-right: 1px solid var(--border);
         font-family: var(--sans);
         font-size: 11px;
@@ -164,7 +176,7 @@
         font-weight: 600;
       }
       .sec-title {
-        padding: 24px 32px;
+        padding: 24px 40px;
         font-size: 22px;
         font-weight: 400;
         color: var(--light);
@@ -193,7 +205,7 @@
         font-weight: 600;
       }
       .btn-p:hover {
-        background: #4f46e5;
+        background: #a07d2e;
         transform: translateY(-2px);
       }
       .btn-s {
@@ -217,7 +229,43 @@
       .btn-s:hover {
         color: var(--accent);
         border-color: var(--accent);
-        background: rgba(99, 102, 241, 0.05);
+        background: rgba(209, 162, 58, 0.05);
+      }
+
+      /* HERO PHOTO */
+      .hero-photo-card {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      }
+      .hero-photo {
+        width: 100%;
+        aspect-ratio: 4/3;
+        object-fit: cover;
+        display: block;
+      }
+      .hero-photo-caption {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px 20px 16px;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.55));
+      }
+      .hero-photo-tag {
+        font-family: var(--mono);
+        font-size: 9px;
+        letter-spacing: 0.1em;
+        color: rgba(255, 255, 255, 0.75);
+        text-transform: uppercase;
+        margin-bottom: 4px;
+      }
+      .hero-photo-name {
+        font-family: var(--sans);
+        font-size: 13px;
+        font-weight: 500;
+        color: white;
       }
 
       /* TERM CARD */
@@ -328,7 +376,7 @@
       .ff select:focus,
       .ff textarea:focus {
         border-color: var(--accent);
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        box-shadow: 0 0 0 3px rgba(209, 162, 58, 0.1);
       }
       .ff select option {
         background: var(--surface);
@@ -358,7 +406,7 @@
         font-weight: 500;
       }
       .fsub:hover {
-        background: #4f46e5;
+        background: #a07d2e;
         transform: translateY(-2px);
       }
 
@@ -387,7 +435,7 @@
       .social-link:hover {
         border-color: var(--accent);
         color: var(--accent);
-        background: rgba(99, 102, 241, 0.05);
+        background: rgba(209, 162, 58, 0.05);
       }
       .social-link svg {
         width: 18px;
@@ -395,15 +443,354 @@
         fill: currentColor;
       }
 
+      /* HOW IT WORKS */
+      .how-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 64px;
+        align-items: center;
+        padding: 56px 40px;
+        border-bottom: 1px solid var(--border);
+      }
+      .how-row:last-of-type { border-bottom: none; }
+      .how-row-reverse { direction: rtl; }
+      .how-row-reverse > * { direction: ltr; }
+      .how-divider { border-bottom: 1px solid var(--border); }
+      .how-num {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--accent);
+        letter-spacing: 0.08em;
+        margin-bottom: 6px;
+        opacity: 0.8;
+      }
+      .how-label {
+        font-family: var(--mono);
+        font-size: 9px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+      .how-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--light);
+        line-height: 1.25;
+        margin-bottom: 14px;
+      }
+      .how-desc {
+        font-size: 13px;
+        line-height: 1.8;
+        color: var(--sub);
+        margin-bottom: 20px;
+      }
+      .how-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .how-list li {
+        font-size: 12px;
+        color: var(--sub);
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+      }
+      .how-concept-note {
+        margin-top: 16px;
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--muted);
+        line-height: 1.6;
+        border-left: 2px solid var(--border);
+        padding-left: 12px;
+      }
+      .how-list li::before {
+        content: "—";
+        color: var(--accent);
+        flex-shrink: 0;
+        font-weight: 700;
+      }
+
+      /* MOCK UI */
+      .mock-card {
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      }
+      .mock-bar {
+        padding: 16px 20px 12px;
+        border-bottom: 1px solid var(--border);
+        background: #faf9f7;
+      }
+      .mock-step-track {
+        height: 2px;
+        background: #e8e4db;
+        border-radius: 2px;
+        margin-bottom: 12px;
+        position: relative;
+      }
+      .mock-step-fill {
+        position: absolute;
+        top: 0; left: 0;
+        height: 100%;
+        background: #D1A23A;
+        border-radius: 2px;
+        transition: width 0.4s;
+      }
+      .mock-steps-row {
+        display: flex;
+        justify-content: space-between;
+      }
+      .mock-step-dot {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        flex: 1;
+      }
+      .mock-step-dot span {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+        font-weight: 700;
+        font-family: var(--mono);
+        background: #f3f4f6;
+        color: #9ca3af;
+        border: none;
+      }
+      .mock-step-dot.active span {
+        background: #D1A23A;
+        color: #fff;
+      }
+      .mock-step-dot.done span {
+        background: #1a1a1a;
+        color: #fff;
+      }
+      .mock-step-dot small {
+        font-size: 8px;
+        color: #9ca3af;
+        font-family: var(--mono);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .mock-step-dot.active small { color: #1a1a1a; font-weight: 700; }
+      .mock-step-dot.done small { color: #D1A23A; font-weight: 700; }
+      .mock-body { padding: 18px 20px 20px; }
+      .mock-label {
+        font-family: var(--mono);
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #D1A23A;
+        margin-bottom: 8px;
+      }
+      .mock-upload {
+        border: 2px dashed #e8e4db;
+        border-radius: 10px;
+        padding: 14px 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        color: #6b7280;
+        text-align: center;
+      }
+      .mock-upload span { font-size: 11px; font-weight: 500; }
+      .mock-upload small { font-size: 9px; color: #9ca3af; }
+      .mock-photos {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+      }
+      .mock-photo {
+        border: 2px dashed #e8e4db;
+        border-radius: 8px;
+        padding: 10px 6px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        color: #9ca3af;
+        font-size: 9px;
+        text-align: center;
+      }
+      .mock-photo.req { border-color: #f0d9a0; background: #fffbf0; color: #a07d2e; }
+      .mock-input-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .mock-input {
+        border: 1px solid #e8e4db;
+        border-radius: 8px;
+        padding: 7px 12px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #1a1a1a;
+        background: #f8f9fb;
+        width: 72px;
+        text-align: center;
+      }
+      .mock-unit { font-size: 11px; color: #9ca3af; }
+      .mock-tag {
+        font-family: var(--mono);
+        font-size: 9px;
+        color: #D1A23A;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+      }
+      .mock-opts {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+      }
+      .mock-opt {
+        border: 1.5px solid #e8e4db;
+        border-radius: 8px;
+        padding: 6px 10px;
+        font-size: 10px;
+        color: #6b7280;
+        font-weight: 500;
+        background: transparent;
+      }
+      .mock-opt.selected {
+        border-color: #D1A23A;
+        color: #D1A23A;
+        background: rgba(209,162,58,0.06);
+        font-weight: 700;
+      }
+      .mock-concept-modules {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+      .mock-module {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        padding: 10px 12px;
+        background: #faf9f7;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+      }
+      .mock-module-n {
+        font-family: var(--mono);
+        font-size: 9px;
+        font-weight: 700;
+        color: #D1A23A;
+        letter-spacing: 0.08em;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .mock-module-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 3px;
+      }
+      .mock-palette {
+        display: flex;
+        gap: 3px;
+        margin-top: 5px;
+      }
+      .mock-palette div {
+        width: 18px;
+        height: 18px;
+        border-radius: 4px;
+        border: 1px solid rgba(0,0,0,0.08);
+      }
+      .mock-status-track {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 14px;
+      }
+      .mock-status-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .mock-status-dot {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #f3f4f6;
+        color: #9ca3af;
+        font-size: 9px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-family: var(--mono);
+      }
+      .mock-status-item.done .mock-status-dot { background: #1a1a1a; color: #fff; }
+      .mock-status-item.active .mock-status-dot { background: #D1A23A; color: #fff; }
+      .mock-status-item span { font-size: 11px; color: #6b7280; }
+      .mock-status-item.done span { color: #9ca3af; }
+      .mock-status-item.active span:first-of-type { color: #1a1a1a; font-weight: 700; }
+      .mock-status-badge {
+        margin-left: auto;
+        font-family: var(--mono);
+        font-size: 7px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        color: #D1A23A;
+        background: rgba(209,162,58,0.1);
+        padding: 2px 6px;
+        border-radius: 99px;
+      }
+      @keyframes status-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+      .mock-status-dot.pulse { animation: status-pulse 1.8s ease-in-out infinite; }
+
+      .mock-pdf-btn {
+        background: #1a1a1a;
+        color: #fff;
+        border-radius: 10px;
+        padding: 9px 14px;
+        font-size: 11px;
+        font-weight: 700;
+        text-align: center;
+        cursor: default;
+      }
+
+      @media (max-width: 768px) {
+        .how-row {
+          grid-template-columns: 1fr;
+          padding: 40px 20px;
+          gap: 32px;
+        }
+        .how-row-reverse { direction: ltr; }
+      }
+
       /* FOOTER */
       footer {
         border-top: 1px solid var(--border);
+        background: var(--surface);
+        box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
+      }
+      .footer-inner {
+        max-width: 1200px;
+        margin: 0 auto;
         padding: 40px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: var(--surface);
-        box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.05);
       }
       .fl {
         font-family: var(--sans);
@@ -455,13 +842,12 @@
      PAGE: HOME
   ════════════════════════════════ */
       .hero {
-        min-height: calc(100vh - 52px);
+        min-height: calc(100vh - 60px);
         padding: 80px 40px;
         display: grid;
         grid-template-columns: 1fr 460px;
         gap: 80px;
         align-items: center;
-        border-bottom: 1px solid var(--border);
         max-width: 1200px;
         margin: 0 auto;
       }
@@ -492,7 +878,7 @@
         font-weight: 300;
         line-height: 1.08;
         color: var(--light);
-        margin-bottom: 24px;
+        margin-bottom: 28px;
         letter-spacing: -0.02em;
       }
       h1 strong {
@@ -506,16 +892,17 @@
         line-height: 1.75;
         color: var(--sub);
         max-width: 480px;
-        margin-bottom: 40px;
+        margin-bottom: 44px;
       }
       .cta-row {
         display: flex;
         gap: 12px;
         align-items: center;
         flex-wrap: wrap;
+        margin-bottom: 4px;
       }
       .hero-note {
-        margin-top: 20px;
+        margin-top: 28px;
         font-family: var(--mono);
         font-size: 9px;
         letter-spacing: 0.1em;
@@ -534,10 +921,11 @@
       }
       .step-n {
         font-family: var(--mono);
-        font-size: 9px;
-        color: var(--muted);
+        font-size: 11px;
+        color: var(--accent);
         margin-bottom: 20px;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.04em;
+        opacity: 0.7;
       }
       .step-title {
         font-size: 14px;
@@ -575,6 +963,10 @@
         color: var(--muted);
         margin-bottom: 14px;
         letter-spacing: 0.1em;
+      }
+      .out-icon {
+        margin-bottom: 16px;
+        color: var(--accent);
       }
       .out-name {
         font-size: 14px;
@@ -689,7 +1081,7 @@
       .plan-btn:hover {
         border-color: var(--accent);
         color: var(--accent);
-        background: rgba(99, 102, 241, 0.05);
+        background: rgba(209, 162, 58, 0.05);
       }
       .plan.featured .plan-btn {
         background: var(--accent);
@@ -697,8 +1089,8 @@
         border-color: var(--accent);
       }
       .plan.featured .plan-btn:hover {
-        background: #4f46e5;
-        border-color: #4f46e5;
+        background: #a07d2e;
+        border-color: #a07d2e;
       }
       .who-grid {
         display: grid;
@@ -830,6 +1222,7 @@
       .port-filter.active {
         border-color: var(--accent);
         color: var(--accent);
+        background: rgba(209, 162, 58, 0.05);
       }
 
       .port-grid {
@@ -1178,7 +1571,7 @@
         font-weight: 600;
       }
       .art-nl-btn:hover {
-        background: #4f46e5;
+        background: #a07d2e;
         transform: translateY(-2px);
       }
 
@@ -1211,43 +1604,63 @@
         grid-template-columns: repeat(3, 1fr);
       }
       .testimonial {
-        padding: 44px 32px;
+        padding: 48px 36px;
         border-right: 1px solid var(--border);
         position: relative;
+        background: var(--surface);
       }
       .testimonial:last-child {
         border-right: none;
       }
+      .testimonial-stars {
+        font-size: 13px;
+        color: #f59e0b;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+      }
       .testimonial-quote {
-        font-size: 14px;
-        line-height: 1.9;
+        font-size: 15px;
+        line-height: 1.85;
         color: var(--body);
-        margin-bottom: 28px;
+        margin-bottom: 32px;
         font-style: italic;
-        padding-left: 20px;
-        border-left: 2px solid var(--accent);
+        position: relative;
+        padding-left: 0;
+      }
+      .testimonial-quote::before {
+        content: "\201C";
+        font-size: 56px;
+        line-height: 1;
+        color: var(--accent);
+        opacity: 0.18;
+        font-family: Georgia, serif;
+        font-style: normal;
+        display: block;
+        margin-bottom: -12px;
       }
       .testimonial-person {
         display: flex;
         align-items: center;
         gap: 14px;
+        padding-top: 24px;
+        border-top: 1px solid var(--border);
       }
       .testimonial-avatar {
-        width: 42px;
-        height: 42px;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
         background: var(--accent);
         display: flex;
         align-items: center;
         justify-content: center;
         font-family: var(--sans);
-        font-size: 16px;
+        font-size: 17px;
         font-weight: 500;
         color: white;
         flex-shrink: 0;
       }
       .testimonial-name {
-        font-size: 13px;
+        font-size: 14px;
         font-weight: 500;
         color: var(--light);
       }
@@ -1255,7 +1668,7 @@
         font-family: var(--mono);
         font-size: 10px;
         color: var(--muted);
-        margin-top: 2px;
+        margin-top: 3px;
         letter-spacing: 0.04em;
       }
 
@@ -1263,8 +1676,8 @@
       .hero-stats {
         display: flex;
         gap: 32px;
-        margin-top: 28px;
-        padding-top: 24px;
+        margin-top: 32px;
+        padding-top: 28px;
         border-top: 1px solid var(--border);
       }
       .hero-stat-num {
@@ -1279,13 +1692,63 @@
         margin-top: 4px;
       }
 
+      /* HAMBURGER */
+      .mob-btn {
+        display: none;
+        background: none;
+        border: 1px solid var(--border);
+        padding: 6px 10px;
+        color: var(--light);
+        cursor: pointer;
+        border-radius: 6px;
+        align-items: center;
+        justify-content: center;
+      }
+      .mob-nav {
+        display: none;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        z-index: 98;
+        flex-direction: column;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      }
+      .mob-nav.open {
+        display: flex;
+      }
+      .mob-nav a {
+        font-family: var(--sans);
+        font-size: 15px;
+        color: var(--sub);
+        text-decoration: none;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border);
+        font-weight: 400;
+        transition: color 0.2s, background 0.2s;
+      }
+      .mob-nav a:last-child {
+        border-bottom: none;
+      }
+      .mob-nav a:hover,
+      .mob-nav a.active {
+        color: var(--accent);
+        background: rgba(209, 162, 58, 0.04);
+      }
+
       /* MOBILE */
       @media (max-width: 768px) {
-        nav {
+        .nav-inner {
           padding: 0 20px;
         }
         .nav-links {
           display: none;
+        }
+        .mob-btn {
+          display: flex;
         }
         .nav-r {
           gap: 12px;
@@ -1299,18 +1762,15 @@
         .sec-hd {
           grid-template-columns: 1fr;
         }
-        .sec-tag {
-          border-right: none;
-          border-bottom: 1px solid var(--border);
-        }
         .steps {
-          grid-template-columns: 1fr 1fr;
-        }
-        .step:nth-child(2n) {
-          border-right: none;
+          grid-template-columns: 1fr;
         }
         .step {
+          border-right: none;
           border-bottom: 1px solid var(--border);
+        }
+        .step:last-child {
+          border-bottom: none;
         }
         .output-grid,
         .who-grid {
@@ -1360,36 +1820,83 @@
           padding: 40px 20px;
           align-items: flex-start;
         }
-        footer {
+        .footer-inner {
           flex-direction: column;
           gap: 10px;
           text-align: center;
           padding: 18px 20px;
         }
-
+        .step:nth-last-child(-n+2) {
+          border-bottom: none;
+        }
+        .sec-tag {
+          padding: 16px 20px;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+        }
+        .sec-title {
+          padding: 16px 20px;
+          font-size: 18px;
+        }
+        .step {
+          padding: 28px 20px;
+        }
+        .out-cell {
+          padding: 24px 20px;
+        }
+        .who-card {
+          padding: 28px 20px;
+        }
+        .term-body {
+          font-size: 10px;
+          overflow-x: auto;
+        }
         .testimonials-grid {
           grid-template-columns: 1fr;
         }
         .testimonial {
           border-right: none;
           border-bottom: 1px solid var(--border);
+          padding: 36px 20px;
         }
         .testimonial:last-child {
           border-bottom: none;
         }
+        .testimonial-quote::before {
+          font-size: 40px;
+        }
+        .testimonial-person {
+          padding-top: 20px;
+        }
         .hero-stats {
           gap: 20px;
+        }
+        .plan {
+          padding: 32px 20px;
+        }
+        .cta-row {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .btn-p,
+        .btn-s {
+          width: 100%;
+          text-align: center;
         }
       }
     </style>
   </head>
   <body>
-
     <!-- NAV -->
     <nav>
-      <a href="#" class="logo" onclick="showPage('home', this)"
-        >OTELIE <span>STUDIO</span></a
-      >
+      <div class="nav-inner">
+      <a href="#" class="logo" onclick="return goToHome()">
+        <svg width="26" height="35" viewBox="440 127 322 434" fill="none" aria-hidden="true">
+          <path d="M600 135 C516 135 448 203 448 287 L448 401 C448 485 516 553 600 553 L600 497 C547 497 504 454 504 401 L504 287 C504 234 547 191 600 191 C653 191 696 234 696 287 L696 385 C696 400 708 412 723 412 L752 412 L752 287 C752 203 684 135 600 135Z" fill="#D1A23A"/>
+          <path d="M642 444 L754 444 C754 490 716 527 669 527 C623 527 586 490 586 444 L642 444Z" fill="#1a1a1a"/>
+        </svg>
+        <span class="logo-wordmark">otelie</span>
+      </a>
       <div class="nav-r">
         <ul class="nav-links">
           <li>
@@ -1430,15 +1937,12 @@
             >
           </li>
           <li>
-            <a href="#how" data-en="How it works" data-pt="Como funciona"
+            <a href="#" data-en="How it works" data-pt="Como funciona" onclick="return goToHome('how')"
               >How it works</a
             >
           </li>
           <li>
-            <a href="#pricing" data-en="Pricing" data-pt="Preços">Pricing</a>
-          </li>
-          <li>
-            <a href="#access" data-en="Get access" data-pt="Acesso"
+            <a href="#" data-en="Get access" data-pt="Acesso" onclick="return goToHome('access')"
               >Get access</a
             >
           </li>
@@ -1447,69 +1951,77 @@
           <button class="lb on" id="ben" onclick="setLang('en')">EN</button>
           <button class="lb" id="bpt" onclick="setLang('pt')">PT</button>
         </div>
+        <button class="mob-btn" id="mob-btn" onclick="toggleMobNav()" aria-label="Menu">
+          <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+            <path d="M0 1h18M0 7h18M0 13h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
       </div>
     </nav>
 
+    <!-- MOBILE NAV -->
+    <div id="mob-nav" class="mob-nav">
+      <a href="#" data-en="Home" data-pt="Início" onclick="showPage('home', null); closeMobNav(); return false;">Home</a>
+      <a href="#" data-en="Portfolio" data-pt="Portfólio" onclick="showPage('portfolio', null); closeMobNav(); return false;">Portfolio</a>
+      <a href="#" data-en="Articles" data-pt="Artigos" onclick="showPage('articles', null); closeMobNav(); return false;">Articles</a>
+      <a href="#" data-en="How it works" data-pt="Como funciona" onclick="goToHome('how'); return false;">How it works</a>
+      <a href="#" data-en="Get access" data-pt="Acesso" onclick="goToHome('access'); return false;">Get access</a>
+    </div>
+
     <!-- ═══════════ PAGE: HOME ═══════════ -->
     <div id="page-home" class="page active">
-      <div
-        style="
-          max-width: 1200px;
-          margin: 0 auto;
-          border-left: 1px solid var(--border);
-          border-right: 1px solid var(--border);
-        "
-      >
+      <div style="border-bottom: 1px solid var(--border);">
         <div class="hero">
           <div class="hero-left">
             <div class="hero-badge">
               <div class="badge-dot"></div>
               <div
                 class="badge-txt"
-                data-en="Early access open — Cafés & Small Retail"
-                data-pt="Acesso antecipado aberto — Cafés & Varejo Pequeno"
+                data-en="Early access open, Cafés & Small Retail"
+                data-pt="Acesso antecipado aberto, Cafés & Pequenos Negócios"
               >
-                Early access open — Cafés & Small Retail
+                Early access open, Cafés & Small Retail
               </div>
             </div>
             <h1
-              data-en="AI-generated<br>spatial briefs for<br>your <span class='a'>space.</span>"
-              data-pt="Briefings espaciais<br>gerados por IA para<br>o seu <span class='a'>espaço.</span>"
+              data-en="From empty space to a place with <span class='a'>soul.</span>"
+              data-pt="De espaço vazio a um ambiente com <span class='a'>alma.</span>"
             >
-              AI-generated<br />spatial briefs for<br />your
-              <span class="a">space.</span>
+              From empty space to a place with <span class="a">soul.</span>
             </h1>
             <p
               class="hero-sub"
-              data-en="Enter your space details. Get a complete design specification in minutes — lighting, materials, acoustics, and layout — ready to hand to your architect or contractor."
-              data-pt="Insira os dados do seu espaço. Receba uma especificação de design completa em minutos — iluminação, materiais, acústica e layout — pronto para entregar ao seu arquiteto ou construtor."
+              data-en="Describe your café or store in plain words. OTELIE turns that into a complete design concept, lighting, materials, layout, aligned to your brand and ready to guide your next design decisions."
+              data-pt="Descreva seu café ou loja em palavras simples. A OTELIE transforma isso num conceito completo, iluminação, materiais, layout, alinhado à sua marca e pronto para orientar suas próximas decisões de design."
             >
-              Enter your space details. Get a complete design specification in
-              minutes — lighting, materials, acoustics, and layout — ready to
-              hand to your architect or contractor.
+              Describe your café or store in plain words. OTELIE turns that into
+              a complete design concept, lighting, materials, layout, aligned
+              to your brand and ready to guide your next design decisions.
             </p>
             <div class="cta-row">
               <a
-                href="#access"
+                href="#"
                 class="btn-p"
-                data-en="Get early access"
-                data-pt="Obter acesso antecipado"
-                >Get early access</a
+                onclick="return goToHome('access')"
+                data-en="Get my concept"
+                data-pt="Quero meu conceito"
+                >Get my concept</a
               >
               <a
-                href="#output"
+                href="#"
                 class="btn-s"
-                data-en="See sample output"
-                data-pt="Ver exemplo de saída"
-                >See sample output</a
-              >
+                onclick="document.getElementById('output').scrollIntoView({behavior:'smooth'}); return false;"
+                data-en="See examples"
+                data-pt="Ver exemplos"
+                >See examples</a>
             </div>
             <p
               class="hero-note"
-              data-en="No design experience required. Output in PDF + structured data."
-              data-pt="Sem necessidade de experiência em design. Saída em PDF + dados estruturados."
+              data-en="No design experience needed. No technical knowledge required."
+              data-pt="Sem experiência em design. Sem conhecimento técnico necessário."
             >
-              No design experience required. Output in PDF + structured data.
+              No design experience needed. No technical knowledge required.
             </p>
             <div class="hero-stats">
               <div>
@@ -1530,50 +2042,15 @@
             class="hero-right"
             style="opacity: 0; animation: fadeUp 0.9s ease 0.35s forwards"
           >
-            <div class="term-card">
-              <div class="term-bar">
-                <div class="td"></div>
-                <div class="td"></div>
-                <div class="td"></div>
-                <div
-                  class="tl"
-                  data-en="OTELIE Studio — generating brief"
-                  data-pt="OTELIE Studio — gerando briefing"
-                >
-                  OTELIE Studio — generating brief
-                </div>
-              </div>
-              <div class="term-body">
-                <div class="tp" id="tp">
-                  <span class="ar">→</span> type: café · area: 85m² · use:
-                  dine-in + takeaway<br />
-                  <span class="ar">→</span> brand: independent · location: urban
-                  ground floor<br />
-                  <span class="ar">→</span>
-                  <span style="color: var(--accent)">generating...</span>
-                </div>
-                <div class="tr" id="tr">
-                  <span class="k">LIGHTING</span><br />
-                  Primary: 2700K pendants, 2.0m hang · Task: 3000K
-                  under-counter<br />
-                  Target: 80 lux ambient, 250 lux counter · No overhead
-                  fluorescent<br /><br />
-                  <span class="k">MATERIALS</span><br />
-                  Walls: NCS S2005-Y20R matte plaster · Floor: poured concrete
-                  or unsealed oak<br />
-                  Counter: aged steel or honed stone · Seating: linen or leather
-                  upholstery<br /><br />
-                  <span class="k">ACOUSTICS</span><br />
-                  Target RT60: 0.55s · Ceiling: acoustic panel or timber
-                  baffle<br />
-                  Floor: 30% rug coverage minimum · No hard parallel surfaces<br /><br />
-                  <span class="k">LAYOUT</span><br />
-                  Entry buffer: 1.8m · Counter: visible from entry · Min aisle:
-                  850mm<br />
-                  Seating density: 1.8m²/cover · Service path separated<br /><br />
-                  <span class="k">STATUS</span> Brief complete · 4 pages · PDF
-                  ready<span class="tc"></span>
-                </div>
+            <div class="hero-photo-card">
+              <img
+                src="cafe-concept.png"
+                alt="Concept de café gerado com OTELIE, iluminação, materiais e layout"
+                class="hero-photo"
+              />
+              <div class="hero-photo-caption">
+                <div class="hero-photo-tag" data-en="OTELIE concept" data-pt="Concept OTELIE">OTELIE concept</div>
+                <div class="hero-photo-name" data-en="Industrial Café · São Paulo" data-pt="Café Industrial · São Paulo">Industrial Café · São Paulo</div>
               </div>
             </div>
           </div>
@@ -1584,87 +2061,221 @@
       <section class="section reveal" id="how">
         <div class="sec-wrap">
           <div class="sec-hd">
-            <div class="sec-tag" data-en="How it works" data-pt="Como funciona">
-              How it works
-            </div>
-            <div
-              class="sec-title"
-              data-en="Three inputs. One <em>complete specification.</em>"
-              data-pt="Três entradas. Uma <em>especificação completa.</em>"
-            >
-              Three inputs. One <em>complete specification.</em>
+            <div class="sec-tag" data-en="How it works" data-pt="Como funciona">How it works</div>
+            <div class="sec-title" data-en="Three steps. <em>No complications.</em>" data-pt="Três etapas. <em>Sem complicação.</em>">
+              Three steps. <em>No complications.</em>
             </div>
           </div>
-          <div class="steps">
-            <div class="step">
-              <div class="step-n">STEP_01</div>
-              <div
-                class="step-title"
-                data-en="Describe your space"
-                data-pt="Descreva seu espaço"
-              >
-                Describe your space
+
+          <!-- STEP 1 -->
+          <div class="how-row">
+            <div class="how-info">
+              <div class="how-num">01</div>
+              <div class="how-label" data-en="Survey" data-pt="Levantamento">Survey</div>
+              <div class="how-title" data-en="Tell us about your space" data-pt="Conte sobre o seu espaço">Tell us about your space</div>
+              <div class="how-desc" data-en="Upload a floor plan sketch, hand-drawn, photo, or CAD. AI reads geometry and dimensions automatically. Then add photos from 3 angles and confirm finishes: floor, walls, and ceiling." data-pt="Envie um croqui de planta, feito à mão, foto ou CAD. A IA lê a geometria e as dimensões automaticamente. Depois adicione fotos de 3 ângulos e confirme os acabamentos: piso, paredes e teto.">
+                Upload a floor plan sketch, hand-drawn, photo, or CAD. AI reads geometry and dimensions automatically. Then add photos from 3 angles and confirm finishes: floor, walls, and ceiling.
               </div>
-              <div
-                class="step-desc"
-                data-en="Enter type (café, store, bar), floor area, number of covers or fixtures, and location type. Takes under 2 minutes."
-                data-pt="Informe o tipo (café, loja, bar), área em m², número de lugares e tipo de localização. Leva menos de 2 minutos."
-              >
-                Enter type (café, store, bar), floor area, number of covers or
-                fixtures, and location type. Takes under 2 minutes.
-              </div>
+              <ul class="how-list">
+                <li data-en="Floor plan sketch (AI-read)" data-pt="Croqui de planta (leitura por IA)">Floor plan sketch (AI-read)</li>
+                <li data-en="3 required space photos" data-pt="3 fotos obrigatórias do espaço">3 required space photos</li>
+                <li data-en="Dimensions &amp; ceiling height" data-pt="Dimensões e pé-direito">Dimensions &amp; ceiling height</li>
+                <li data-en="Floor, wall &amp; ceiling finishes" data-pt="Acabamentos de piso, paredes e teto">Floor, wall &amp; ceiling finishes</li>
+              </ul>
             </div>
-            <div class="step">
-              <div class="step-n">STEP_02</div>
-              <div
-                class="step-title"
-                data-en="Set your parameters"
-                data-pt="Defina seus parâmetros"
-              >
-                Set your parameters
-              </div>
-              <div
-                class="step-desc"
-                data-en="Select budget range, brand style, operational priorities, and any constraints — ceiling height, landlord restrictions, existing fixtures."
-                data-pt="Selecione faixa de orçamento, estilo de marca, prioridades operacionais e restrições — pé-direito, limitações do imóvel, instalações existentes."
-              >
-                Select budget range, brand style, operational priorities, and
-                any constraints.
-              </div>
-            </div>
-            <div class="step">
-              <div class="step-n">STEP_03</div>
-              <div class="step-title" data-en="Generate" data-pt="Gerar">
-                Generate
-              </div>
-              <div
-                class="step-desc"
-                data-en="OTELIE Studio runs your inputs through its spatial design model. Output ready in under 60 seconds."
-                data-pt="O OTELIE Studio processa suas entradas pelo modelo de design espacial. Saída pronta em menos de 60 segundos."
-              >
-                OTELIE Studio runs your inputs through its spatial design model.
-                Output ready in under 60 seconds.
-              </div>
-            </div>
-            <div class="step">
-              <div class="step-n">STEP_04</div>
-              <div
-                class="step-title"
-                data-en="Download & use"
-                data-pt="Baixar e usar"
-              >
-                Download & use
-              </div>
-              <div
-                class="step-desc"
-                data-en="Export as PDF or structured data. Hand directly to your architect, contractor, or fit-out team."
-                data-pt="Exporte em PDF ou dados estruturados. Entregue diretamente ao seu arquiteto ou construtor."
-              >
-                Export as PDF or structured data. Hand directly to your
-                architect, contractor, or fit-out team.
+            <div class="how-visual">
+              <div class="mock-card">
+                <div class="mock-bar">
+                  <div class="mock-step-track">
+                    <div class="mock-step-fill" style="width:0%"></div>
+                  </div>
+                  <div class="mock-steps-row">
+                    <div class="mock-step-dot active"><span>1</span><small data-en="Survey" data-pt="Levantamento">Survey</small></div>
+                    <div class="mock-step-dot"><span>2</span><small data-en="Needs" data-pt="Necessidades">Needs</small></div>
+                    <div class="mock-step-dot"><span>3</span><small>Concept</small></div>
+                  </div>
+                </div>
+                <div class="mock-body">
+                  <div class="mock-label" data-en="FLOOR PLAN SKETCH" data-pt="CROQUI DE PLANTA">FLOOR PLAN SKETCH</div>
+                  <div class="mock-upload">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    <span data-en="Drag or click: photo, scan or digital" data-pt="Arraste ou clique: foto, scan ou digital">Drag or click: photo, scan or digital</span>
+                    <small data-en="AI extracts geometry and space elements" data-pt="A IA extrai geometria e elementos do espaço">AI extracts geometry and space elements</small>
+                  </div>
+                  <div class="mock-label" style="margin-top:14px" data-en="SPACE PHOTOS" data-pt="FOTOS DO ESPAÇO">SPACE PHOTOS</div>
+                  <div class="mock-photos">
+                    <div class="mock-photo req">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                      <span data-en="Facade" data-pt="Fachada">Facade</span>
+                    </div>
+                    <div class="mock-photo req">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                      <span data-en="Int. back" data-pt="Int. fundo">Int. back</span>
+                    </div>
+                    <div class="mock-photo req">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                      <span data-en="Int. front" data-pt="Int. frente">Int. front</span>
+                    </div>
+                  </div>
+                  <div class="mock-label" style="margin-top:14px" data-en="CEILING HEIGHT" data-pt="PÉ-DIREITO">CEILING HEIGHT</div>
+                  <div class="mock-input-row">
+                    <div class="mock-input">2.80</div>
+                    <span class="mock-unit" data-en="m" data-pt="m">m</span>
+                    <span class="mock-tag" data-en="medium" data-pt="médio">medium</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+
+          <div class="how-divider"></div>
+
+          <!-- STEP 2 -->
+          <div class="how-row how-row-reverse">
+            <div class="how-info">
+              <div class="how-num">02</div>
+              <div class="how-label" data-en="Needs" data-pt="Necessidades">Needs</div>
+              <div class="how-title" data-en="Define your business and concept" data-pt="Defina seu negócio e conceito">Define your business and concept</div>
+              <div class="how-desc" data-en="Tell us the type of venue, your target audience, brand name, and the aesthetic you're after. Set budget range and timeline. Optionally upload visual references, images of spaces that inspire you." data-pt="Diga o tipo de estabelecimento, seu público-alvo, nome da marca e a estética que busca. Defina faixa de orçamento e prazo. Opcionalmente envie referências visuais, imagens de espaços que te inspiram.">
+                Tell us the type of venue, your target audience, brand name, and the aesthetic you're after. Set budget range and timeline. Optionally upload visual references, images of spaces that inspire you.
+              </div>
+              <ul class="how-list">
+                <li data-en="Type of use: café, restaurant, bar, retail" data-pt="Tipo de uso: café, restaurante, bar, varejo">Type of use: café, restaurant, bar, retail</li>
+                <li data-en="Target audience &amp; brand" data-pt="Público-alvo e marca">Target audience &amp; brand</li>
+                <li data-en="Concept keywords (minimalist, industrial…)" data-pt="Palavras-chave de conceito (minimalista, industrial…)">Concept keywords (minimalist, industrial…)</li>
+                <li data-en="Budget range &amp; timeline" data-pt="Faixa de orçamento e prazo">Budget range &amp; timeline</li>
+              </ul>
+            </div>
+            <div class="how-visual">
+              <div class="mock-card">
+                <div class="mock-bar">
+                  <div class="mock-step-track">
+                    <div class="mock-step-fill" style="width:50%"></div>
+                  </div>
+                  <div class="mock-steps-row">
+                    <div class="mock-step-dot done"><span>✓</span><small data-en="Survey" data-pt="Levantamento">Survey</small></div>
+                    <div class="mock-step-dot active"><span>2</span><small data-en="Needs" data-pt="Necessidades">Needs</small></div>
+                    <div class="mock-step-dot"><span>3</span><small>Concept</small></div>
+                  </div>
+                </div>
+                <div class="mock-body">
+                  <div class="mock-label" data-en="TYPE OF USE" data-pt="TIPO DE USO">TYPE OF USE</div>
+                  <div class="mock-opts">
+                    <div class="mock-opt selected" data-en="Café / Coffee Shop" data-pt="Cafeteria">Café / Coffee Shop</div>
+                    <div class="mock-opt" data-en="Small Restaurant" data-pt="Pequeno restaurante">Small Restaurant</div>
+                    <div class="mock-opt" data-en="Ice Cream Shop" data-pt="Sorveteria">Ice Cream Shop</div>
+                    <div class="mock-opt" data-en="Bar" data-pt="Bar">Bar</div>
+                  </div>
+                  <div class="mock-label" style="margin-top:14px" data-en="DESIRED CONCEPT" data-pt="CONCEITO DESEJADO">DESIRED CONCEPT</div>
+                  <div class="mock-opts">
+                    <div class="mock-opt" data-en="Minimalist" data-pt="Minimalista">Minimalist</div>
+                    <div class="mock-opt selected" data-en="Industrial" data-pt="Industrial">Industrial</div>
+                    <div class="mock-opt" data-en="Cozy" data-pt="Aconchegante">Cozy</div>
+                    <div class="mock-opt" data-en="Contemporary" data-pt="Contemporâneo">Contemporary</div>
+                  </div>
+                  <div class="mock-label" style="margin-top:14px" data-en="ESTIMATED BUDGET" data-pt="ORÇAMENTO ESTIMADO">ESTIMATED BUDGET</div>
+                  <div class="mock-opts">
+                    <div class="mock-opt" data-en="Up to R$ 50k" data-pt="Até R$ 50k">Up to R$ 50k</div>
+                    <div class="mock-opt selected" data-en="R$ 50k – 150k" data-pt="R$ 50k – 150k">R$ 50k – 150k</div>
+                    <div class="mock-opt" data-en="R$ 150k – 300k" data-pt="R$ 150k – 300k">R$ 150k – 300k</div>
+                    <div class="mock-opt" data-en="Above R$ 300k" data-pt="Acima de R$ 300k">Above R$ 300k</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="how-divider"></div>
+
+          <!-- STEP 3 -->
+          <div class="how-row">
+            <div class="how-info">
+              <div class="how-num">03</div>
+              <div class="how-label">Concept Redesign™</div>
+              <div class="how-title" data-en="Receive your complete design concept" data-pt="Receba seu conceito de design completo">Receive your complete design concept</div>
+              <div class="how-desc" data-en="Once your briefing is submitted, our specialist team reviews every detail, photos, finishes, brand, and concept, and develops a tailored Concept Redesign™ for your space. You receive the complete conceptual PDF by email within 24 hours, to guide your design direction and align everyone involved in the project." data-pt="Assim que seu briefing é enviado, nossa equipe especializada revisa cada detalhe, fotos, acabamentos, marca e conceito, e desenvolve um Concept Redesign™ personalizado para o seu espaço. Você recebe o PDF conceitual completo por e-mail em até 24 horas, para orientar a direção de design e alinhar todos os envolvidos no projeto.">
+                Once your briefing is submitted, our specialist team reviews every detail, photos, finishes, brand, and concept, and develops a tailored Concept Redesign™ for your space. You receive the complete conceptual PDF by email within 24 hours, to guide your design direction and align everyone involved in the project.
+              </div>
+              <ul class="how-list">
+                <li data-en="01, New Atmosphere: palette, lighting, materials" data-pt="01, Nova Atmosfera: paleta, iluminação, materiais">01, New Atmosphere: palette, lighting &amp; materials</li>
+                <li data-en="02, Visual Rhythm: layout, circulation, focal points" data-pt="02, Ritmo Visual: layout, circulação, pontos focais">02, Visual Rhythm: layout &amp; focal points</li>
+                <li data-en="03, Emotional Presence: concept &amp; storytelling" data-pt="03, Presença Emocional: conceito e narrativa">03, Emotional Presence &amp; storytelling</li>
+                <li data-en="04, Space Visualizations: before/after renders" data-pt="04, Visualizações: renders antes/depois">04, Space Visualizations: before/after</li>
+                <li data-en="05, Sensory Concept: textures, sound, fragrance" data-pt="05, Sensory Concept: texturas, som, fragrância">05, Sensory Concept: textures &amp; fragrance</li>
+              </ul>
+              <p class="how-concept-note" data-en="This is a conceptual design brief: it defines direction, atmosphere, and identity. Not a technical construction document." data-pt="Este é um briefing de design conceitual: define direção, atmosfera e identidade. Não é um documento técnico de obra.">This is a conceptual design brief: it defines direction, atmosphere, and identity. Not a technical construction document.</p>
+            </div>
+            <div class="how-visual">
+              <div class="mock-card">
+                <div class="mock-bar">
+                  <div class="mock-step-track">
+                    <div class="mock-step-fill" style="width:100%"></div>
+                  </div>
+                  <div class="mock-steps-row">
+                    <div class="mock-step-dot done"><span>✓</span><small data-en="Survey" data-pt="Levantamento">Survey</small></div>
+                    <div class="mock-step-dot done"><span>✓</span><small data-en="Needs" data-pt="Necessidades">Needs</small></div>
+                    <div class="mock-step-dot active"><span>3</span><small>Concept</small></div>
+                  </div>
+                </div>
+                <div class="mock-body">
+                  <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px">
+                    <div style="width:28px;height:28px;border-radius:50%;background:rgba(209,162,58,0.15);display:flex;align-items:center;justify-content:center;color:#D1A23A;font-size:14px;font-weight:700">✓</div>
+                    <div>
+                      <div class="mock-label" style="margin:0" data-en="BRIEFING RECEIVED" data-pt="BRIEFING RECEBIDO">BRIEFING RECEIVED</div>
+                      <div style="font-size:11px;color:#6b7280" data-en="Our team is developing your concept" data-pt="Nossa equipe está desenvolvendo seu conceito">Our team is developing your concept</div>
+                    </div>
+                  </div>
+                  <div class="mock-status-track">
+                    <div class="mock-status-item done">
+                      <div class="mock-status-dot">✓</div>
+                      <span data-en="Briefing received" data-pt="Briefing recebido">Briefing received</span>
+                    </div>
+                    <div class="mock-status-item active">
+                      <div class="mock-status-dot pulse">2</div>
+                      <span data-en="Concept in development" data-pt="Concept em desenvolvimento">Concept in development</span>
+                      <span class="mock-status-badge" data-en="IN PROGRESS" data-pt="EM ANDAMENTO">IN PROGRESS</span>
+                    </div>
+                    <div class="mock-status-item">
+                      <div class="mock-status-dot">3</div>
+                      <span data-en="Initial concept delivered" data-pt="Concept inicial entregue">Initial concept delivered</span>
+                    </div>
+                  </div>
+                  <div class="mock-concept-modules">
+                    <div class="mock-module">
+                      <span class="mock-module-n">01</span>
+                      <div>
+                        <div class="mock-module-title" data-en="New Atmosphere" data-pt="Nova Atmosfera">New Atmosphere</div>
+                        <div class="mock-palette">
+                          <div style="background:#2c1f14"></div>
+                          <div style="background:#8b5e3c"></div>
+                          <div style="background:#c4956a"></div>
+                          <div style="background:#e8d5b7"></div>
+                          <div style="background:#f5f0e8"></div>
+                        </div>
+                        <div style="font-size:10px;color:#6b7280;margin-top:4px" data-en="Warm lighting · Exposed brick · Timber counter" data-pt="Iluminação quente · Tijolo aparente · Balcão de madeira">Warm lighting · Exposed brick · Timber counter</div>
+                      </div>
+                    </div>
+                    <div class="mock-module">
+                      <span class="mock-module-n">02</span>
+                      <div>
+                        <div class="mock-module-title" data-en="Visual Rhythm" data-pt="Ritmo Visual">Visual Rhythm</div>
+                        <div style="font-size:10px;color:#6b7280" data-en="Counter visible from entrance · Min. aisle 850mm" data-pt="Balcão visível da entrada · Corredor mín. 850mm">Counter visible from entrance · Min. aisle 850mm</div>
+                      </div>
+                    </div>
+                    <div class="mock-module">
+                      <span class="mock-module-n">03</span>
+                      <div>
+                        <div class="mock-module-title" data-en="Emotional Presence" data-pt="Presença Emocional">Emotional Presence</div>
+                        <div style="font-size:10px;color:#6b7280;font-style:italic" data-en='"A place where the city slows down"' data-pt='"Um lugar onde a cidade desacelera"'>"A place where the city slows down"</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mock-pdf-btn" data-en="Download PDF brief" data-pt="Baixar PDF do briefing">Download PDF brief</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -1672,119 +2283,92 @@
       <section class="section reveal" id="output">
         <div class="sec-wrap">
           <div class="sec-hd">
-            <div class="sec-tag" data-en="Output" data-pt="Entregáveis">
-              Output
+            <div class="sec-tag" data-en="What you get" data-pt="O que você recebe">
+              What you get
             </div>
             <div
               class="sec-title"
-              data-en="What you get — <em>every time.</em>"
-              data-pt="O que você recebe — <em>sempre.</em>"
+              data-en="A complete concept. <em>In plain language.</em>"
+              data-pt="Um conceito completo. <em>Na sua linguagem.</em>"
             >
-              What you get — <em>every time.</em>
+              A complete concept. <em>In plain language.</em>
             </div>
           </div>
           <div class="output-grid">
             <div class="out-cell">
-              <div class="out-id">01 / lighting</div>
+              <div class="out-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.3 4.7-3.3 6H8.3C6.3 13.7 5 11.5 5 9a7 7 0 0 1 7-7z"/></svg></div>
               <div
                 class="out-name"
-                data-en="Lighting Specification"
-                data-pt="Especificação de Iluminação"
+                data-en="Lighting that welcomes"
+                data-pt="Iluminação que acolhe"
               >
-                Lighting Specification
+                Lighting that welcomes
               </div>
               <div
                 class="out-desc"
-                data-en="Color temperature targets per zone, fixture type recommendations, lux levels, and switching zones. Formatted for electrical contractor."
-                data-pt="Metas de temperatura de cor por zona, recomendações de luminárias, níveis de lux e zonas de controle."
+                data-en="Warm, not glaring. The right light for each corner, over the counter, by the tables, at the entrance. Defined as a conceptual direction for temperature, intensity, and placement."
+                data-pt="Quente, sem ofuscar. A luz certa para cada canto, sobre o balcão, pelas mesas, na entrada. Definida como direção conceitual de temperatura, intensidade e posicionamento."
               >
-                Color temperature targets per zone, fixture type
-                recommendations, lux levels, and switching zones. Formatted for
-                electrical contractor.
-              </div>
-              <div
-                class="out-spec"
-                data-en="e.g. Primary: 2700K / 80 lux · Counter: 3000K / 250 lux"
-                data-pt="ex: Principal: 2700K / 80 lux · Balcão: 3000K / 250 lux"
-              >
-                e.g. Primary: 2700K / 80 lux · Counter: 3000K / 250 lux
+                Warm, not glaring. The right light for each corner, over the
+                counter, by the tables, at the entrance. Defined as a conceptual
+                direction for temperature, intensity, and placement.
               </div>
             </div>
             <div class="out-cell">
-              <div class="out-id">02 / materials</div>
+              <div class="out-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M12 6v12M2 12h20"/></svg></div>
               <div
                 class="out-name"
-                data-en="Materials Schedule"
-                data-pt="Cronograma de Materiais"
+                data-en="Materials with identity"
+                data-pt="Materiais com identidade"
               >
-                Materials Schedule
+                Materials with identity
               </div>
               <div
                 class="out-desc"
-                data-en="Surface-by-surface material specification with NCS color codes, finish types, and supplier category. Budget-tiered options included."
-                data-pt="Especificação superfície por superfície com códigos NCS, tipos de acabamento e categoria de fornecedor."
+                data-en="Floor, walls, counter, everything aligned to the personality of your business and your budget. No guessing at the hardware store."
+                data-pt="Piso, parede, balcão, tudo alinhado à personalidade do seu negócio e ao seu orçamento. Sem adivinhação na loja de materiais."
               >
-                Surface-by-surface material specification with NCS color codes,
-                finish types, and supplier category.
-              </div>
-              <div
-                class="out-spec"
-                data-en="e.g. Walls: NCS S2005-Y20R matte plaster · Counter: honed stone"
-                data-pt="ex: Paredes: NCS S2005-Y20R gesso fosco · Balcão: pedra polida"
-              >
-                e.g. Walls: NCS S2005-Y20R matte plaster · Counter: honed stone
+                Floor, walls, counter, everything aligned to the personality
+                of your business and your budget. No guessing at the hardware
+                store.
               </div>
             </div>
             <div class="out-cell">
-              <div class="out-id">03 / acoustics</div>
+              <div class="out-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h4l5 4V5L9 9z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg></div>
               <div
                 class="out-name"
-                data-en="Acoustic Report"
-                data-pt="Relatório Acústico"
+                data-en="Enough quiet"
+                data-pt="Silêncio suficiente"
               >
-                Acoustic Report
+                Enough quiet
               </div>
               <div
                 class="out-desc"
-                data-en="Reverberation time targets (RT60), treatment recommendations by surface, and noise level benchmarks for your space type."
-                data-pt="Metas de tempo de reverberação (RT60), recomendações por superfície e benchmarks de nível de ruído."
+                data-en="No echo, no noise that wears you down. A space people want to stay in. We handle the acoustics so you don't have to think about it."
+                data-pt="Sem eco, sem barulho que cansa. Um ambiente onde as pessoas querem ficar. A gente cuida da acústica para você não precisar pensar nisso."
               >
-                Reverberation time targets (RT60), treatment recommendations by
-                surface, and noise level benchmarks.
-              </div>
-              <div
-                class="out-spec"
-                data-en="e.g. RT60: 0.55s · Ceiling baffles + 30% soft floor · Max SPL: 68dB"
-                data-pt="ex: RT60: 0,55s · Defletores + 30% piso macio · SPL máx: 68dB"
-              >
-                e.g. RT60: 0.55s · Ceiling baffles + 30% soft floor · Max SPL:
-                68dB
+                No echo, no noise that wears you down. A space people want to
+                stay in. We handle the acoustics so you don't have to think
+                about it.
               </div>
             </div>
             <div class="out-cell">
-              <div class="out-id">04 / layout</div>
+              <div class="out-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 21 3 3 21 21"/><line x1="3" y1="13" x2="13" y2="13"/></svg></div>
               <div
                 class="out-name"
-                data-en="Layout Guidelines"
-                data-pt="Diretrizes de Layout"
+                data-en="Layout that flows"
+                data-pt="Layout que flui"
               >
-                Layout Guidelines
+                Layout that flows
               </div>
               <div
                 class="out-desc"
-                data-en="Circulation widths, zone separation, seating density, counter positioning, and service flow — as numeric specifications."
-                data-pt="Larguras de circulação, separação de zonas, densidade de assentos, posicionamento do balcão e fluxo de serviço."
+                data-en="Where each thing makes sense, tables, counter, circulation, entrance. A space that works for your team and feels natural for your customers."
+                data-pt="Onde cada coisa faz mais sentido, mesas, balcão, circulação, entrada. Um espaço que funciona para a sua equipe e é natural para os seus clientes."
               >
-                Circulation widths, zone separation, seating density, counter
-                positioning, and service flow.
-              </div>
-              <div
-                class="out-spec"
-                data-en="e.g. Min aisle: 850mm · Entry buffer: 1.8m · Cover density: 1.8m²/seat"
-                data-pt="ex: Corredor mín: 850mm · Buffer de entrada: 1,8m · 1,8m²/lugar"
-              >
-                e.g. Min aisle: 850mm · Entry buffer: 1.8m · Cover density:
-                1.8m²/seat
+                Where each thing makes sense, tables, counter, circulation,
+                entrance. A space that works for your team and feels natural for
+                your customers.
               </div>
             </div>
           </div>
@@ -1800,10 +2384,10 @@
             </div>
             <div
               class="sec-title"
-              data-en="Built for <em>operators, not designers.</em>"
-              data-pt="Feito para <em>operadores, não designers.</em>"
+              data-en="For small spaces <em>with big personalities.</em>"
+              data-pt="Para espaços pequenos <em>com muito estilo.</em>"
             >
-              Built for <em>operators, not designers.</em>
+              For small spaces <em>with big personalities.</em>
             </div>
           </div>
           <div class="who-grid">
@@ -1818,11 +2402,12 @@
               </div>
               <div
                 class="who-desc"
-                data-en="Opening a first location or expanding. Get a professional design brief without a design consultant fee."
-                data-pt="Abrindo a primeira unidade ou expandindo. Obtenha um briefing profissional sem honorários de consultor."
+                data-en="Opening your first location, expanding, or mid-renovation? Get a professional conceptual brief that gives your project a clear creative direction, without the consultant fees."
+                data-pt="Abrindo sua primeira unidade, expandindo ou no meio de uma reforma? Obtenha um briefing conceitual profissional que dá uma direção criativa clara ao seu projeto, sem honorários de consultor."
               >
-                Opening a first location or expanding. Get a professional design
-                brief without a design consultant fee.
+                Opening your first location, expanding, or mid-renovation? Get
+                a professional conceptual brief that gives your project a clear
+                creative direction, without the consultant fees.
               </div>
               <div class="who-tags">
                 <span
@@ -1848,11 +2433,12 @@
               </div>
               <div
                 class="who-desc"
-                data-en="Independent stores, concept shops, and showrooms. Lighting specs, layout guidelines, and materials matched to your brand."
-                data-pt="Lojas independentes, concept stores e showrooms. Specs de iluminação, diretrizes de layout e materiais adequados à sua marca."
+                data-en="Running an independent store, concept shop, or showroom? Get lighting specs, layout guidelines, and materials that actually fit your brand, without needing a design team."
+                data-pt="Tem uma loja independente, concept store ou showroom? Obtenha specs de iluminação, layout e materiais que combinam de verdade com sua marca, sem precisar de equipe de design."
               >
-                Independent stores, concept shops, and showrooms. Lighting
-                specs, layout guidelines, and materials matched to your brand.
+                Running an independent store, concept shop, or showroom? Get
+                lighting specs, layout guidelines, and materials that actually
+                fit your brand, without needing a design team.
               </div>
               <div class="who-tags">
                 <span
@@ -1878,11 +2464,12 @@
               </div>
               <div
                 class="who-desc"
-                data-en="Accelerate early-stage briefs and client alignment. Generate a structured specification baseline in minutes, then refine with your expertise."
-                data-pt="Acelere briefings iniciais e alinhamento com clientes. Gere uma especificação de base em minutos e refine com sua expertise."
+                data-en="Start every client conversation with a structured specification already in hand. Generate a detailed baseline in minutes, then apply your expertise where it really counts."
+                data-pt="Comece cada conversa com clientes com uma especificação estruturada em mãos. Gere uma base detalhada em minutos e aplique sua expertise onde ela realmente importa."
               >
-                Accelerate early-stage briefs and client alignment. Generate a
-                structured specification baseline in minutes.
+                Start every client conversation with a structured specification
+                already in hand. Generate a detailed baseline in minutes, then
+                apply your expertise where it really counts.
               </div>
               <div class="who-tags">
                 <span
@@ -1903,7 +2490,7 @@
       </section>
 
       <!-- TESTIMONIALS -->
-      <section class="section reveal">
+      <section class="section reveal" style="display:none">
         <div class="sec-wrap">
           <div class="sec-hd">
             <div class="sec-tag" data-en="Operators say" data-pt="Operadores dizem">
@@ -1919,8 +2506,9 @@
           </div>
           <div class="testimonials-grid">
             <div class="testimonial">
+              <div class="testimonial-stars">★★★★★</div>
               <div class="testimonial-quote" data-en="We opened our second café in 3 weeks using the OTELIE brief. The lighting spec alone saved us two rounds of back-and-forth with our contractor." data-pt="Abrimos nosso segundo café em 3 semanas usando o briefing OTELIE. A spec de iluminação sozinha nos poupou duas rodadas de vai-e-vem com nosso construtor.">
-                "We opened our second café in 3 weeks using the OTELIE brief. The lighting spec alone saved us two rounds of back-and-forth with our contractor."
+                We opened our second café in 3 weeks using the OTELIE brief. The lighting spec alone saved us two rounds of back-and-forth with our contractor.
               </div>
               <div class="testimonial-person">
                 <div class="testimonial-avatar">A</div>
@@ -1931,8 +2519,9 @@
               </div>
             </div>
             <div class="testimonial">
+              <div class="testimonial-stars">★★★★★</div>
               <div class="testimonial-quote" data-en="I had no idea what RT60 meant before OTELIE. Now my store has the acoustic consultant asking what spec I used." data-pt="Não fazia ideia do que era RT60 antes do OTELIE. Agora minha loja tem o consultor acústico perguntando qual spec eu usei.">
-                "I had no idea what RT60 meant before OTELIE. Now my store has the acoustic consultant asking what spec I used."
+                I had no idea what RT60 meant before OTELIE. Now my store has the acoustic consultant asking what spec I used.
               </div>
               <div class="testimonial-person">
                 <div class="testimonial-avatar" style="background:#10b981">T</div>
@@ -1943,8 +2532,9 @@
               </div>
             </div>
             <div class="testimonial">
+              <div class="testimonial-stars">★★★★★</div>
               <div class="testimonial-quote" data-en="Our architect said the OTELIE brief was more detailed than what clients twice our size bring in. Completely worth it." data-pt="Nosso arquiteto disse que o briefing OTELIE era mais detalhado do que o que clientes do dobro do nosso tamanho trazem. Valeu muito.">
-                "Our architect said the OTELIE brief was more detailed than what clients twice our size bring in. Completely worth it."
+                Our architect said the OTELIE brief was more detailed than what clients twice our size bring in. Completely worth it.
               </div>
               <div class="testimonial-person">
                 <div class="testimonial-avatar" style="background:#f59e0b">M</div>
@@ -1959,7 +2549,7 @@
       </section>
 
       <!-- PRICING -->
-      <section class="section reveal" id="pricing">
+      <section class="section reveal" id="pricing" style="display:none">
         <div class="sec-wrap">
           <div class="sec-hd">
             <div class="sec-tag" data-en="Pricing" data-pt="Preços">
@@ -1977,17 +2567,17 @@
             <div class="plan">
               <div
                 class="plan-tag"
-                data-en="Pay per brief"
-                data-pt="Pague por briefing"
+                data-en="One space"
+                data-pt="Um espaço"
               >
-                Pay per brief
+                One space
               </div>
               <div
                 class="plan-name"
-                data-en="Single Brief"
-                data-pt="Briefing Avulso"
+                data-en="One Concept"
+                data-pt="Um Conceito"
               >
-                Single Brief
+                One Concept
               </div>
               <div class="plan-price">
                 $57 <span data-en="/ brief" data-pt="/ briefing">/ brief</span>
@@ -2027,7 +2617,7 @@
                 </li>
               </ul>
               <a
-                href="#access"
+                href="#" onclick="return goToHome('access')"
                 class="plan-btn"
                 data-en="Get started"
                 data-pt="Começar"
@@ -2040,10 +2630,10 @@
               </div>
               <div
                 class="plan-name"
-                data-en="Studio Pack"
-                data-pt="Pacote Studio"
+                data-en="Five Concepts"
+                data-pt="Cinco Conceitos"
               >
-                Studio Pack
+                Five Concepts
               </div>
               <div class="plan-price">
                 $174
@@ -2091,7 +2681,7 @@
                 </li>
               </ul>
               <a
-                href="#access"
+                href="#" onclick="return goToHome('access')"
                 class="plan-btn"
                 data-en="Get started"
                 data-pt="Começar"
@@ -2106,7 +2696,7 @@
               >
                 For teams & architects
               </div>
-              <div class="plan-name">Pro</div>
+              <div class="plan-name" data-en="For Teams" data-pt="Para Equipes">For Teams</div>
               <div class="plan-price">
                 $350 <span data-en="/ month" data-pt="/ mês">/ month</span>
               </div>
@@ -2155,7 +2745,7 @@
                 </li>
               </ul>
               <a
-                href="#access"
+                href="#" onclick="return goToHome('access')"
                 class="plan-btn"
                 data-en="Get started"
                 data-pt="Começar"
@@ -2172,21 +2762,22 @@
           <div>
             <h2
               class="cta-title"
-              data-en="Request <em>early access.</em>"
-              data-pt="Solicitar <em>acesso antecipado.</em>"
+              data-en="Let's get your space <em>designed right.</em>"
+              data-pt="Vamos projetar seu espaço <em>do jeito certo.</em>"
             >
-              Request <em>early access.</em>
+              Let's get your space <em>designed right.</em>
             </h2>
             <p
               class="cta-sub"
-              data-en="OTELIE Studio is in closed beta. Leave your details and we'll send access within 48 hours. No commitment required."
-              data-pt="O OTELIE Studio está em beta fechado. Deixe seus dados e enviaremos o acesso em até 48 horas. Sem compromisso."
+              data-en="We're onboarding a limited number of spaces in closed beta. Leave your details and we'll be in touch within 48 hours, no commitment needed."
+              data-pt="Estamos integrando um número limitado de espaços no beta fechado. Deixe seus dados e entraremos em contato em até 48 horas, sem compromisso."
             >
-              OTELIE Studio is in closed beta. Leave your details and we'll send
-              access within 48 hours. No commitment required.
+              We're onboarding a limited number of spaces in closed beta. Leave
+              your details and we'll be in touch within 48 hours, no
+              commitment needed.
             </p>
             <a href="mailto:studio@otelie.design" class="cta-email"
-              >studio@otelie.design</a
+              >studio@otelie.design</
             >
           </div>
           <div class="form">
@@ -2278,10 +2869,10 @@
         <div>
           <h2
             class="port-title"
-            data-en="Portfolio — <em>Selected projects.</em>"
-            data-pt="Portfólio — <em>Projetos selecionados.</em>"
+            data-en="Portfolio: <em>Selected projects.</em>"
+            data-pt="Portfólio: <em>Projetos selecionados.</em>"
           >
-            Portfolio — <em>Selected projects.</em>
+            Portfolio: <em>Selected projects.</em>
           </h2>
           <p
             class="port-sub"
@@ -2344,10 +2935,10 @@
             </div>
             <div
               class="port-name"
-              data-en="Grão — Specialty Coffee"
-              data-pt="Grão — Café Especial"
+              data-en="Grão, Specialty Coffee"
+              data-pt="Grão, Café Especial"
             >
-              Grão — Specialty Coffee
+              Grão, Specialty Coffee
             </div>
             <div class="port-loc">São Paulo, BR · 72m²</div>
             <div
@@ -2390,10 +2981,10 @@
             </div>
             <div
               class="port-name"
-              data-en="Forma — Concept Store"
-              data-pt="Forma — Concept Store"
+              data-en="Forma, Concept Store"
+              data-pt="Forma, Concept Store"
             >
-              Forma — Concept Store
+              Forma, Concept Store
             </div>
             <div class="port-loc">Lisbon, PT · 95m²</div>
             <div
@@ -2437,10 +3028,10 @@
             </div>
             <div
               class="port-name"
-              data-en="Brasa — Contemporary Grill"
-              data-pt="Brasa — Grill Contemporâneo"
+              data-en="Brasa, Contemporary Grill"
+              data-pt="Brasa, Grill Contemporâneo"
             >
-              Brasa — Contemporary Grill
+              Brasa, Contemporary Grill
             </div>
             <div class="port-loc">Rio de Janeiro, BR · 130m²</div>
             <div
@@ -2482,10 +3073,10 @@
             </div>
             <div
               class="port-name"
-              data-en="Lote — Neighborhood Café"
-              data-pt="Lote — Café de Bairro"
+              data-en="Lote, Neighborhood Café"
+              data-pt="Lote, Café de Bairro"
             >
-              Lote — Neighborhood Café
+              Lote, Neighborhood Café
             </div>
             <div class="port-loc">Porto Alegre, BR · 48m²</div>
             <div
@@ -2517,7 +3108,7 @@
         <div class="port-card" data-cat="retail">
           <div class="port-thumb">
             <div class="port-thumb-inner">
-              <img src="https://images.unsplash.com/photo-1560185007-cde31053f622?w=800&q=80&auto=format&fit=crop" alt="Curated design object store with clean displays, Curitiba" />
+              <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80&auto=format&fit=crop" alt="Curated design object store with clean displays, Curitiba" />
             </div>
           </div>
           <div class="port-info">
@@ -2529,10 +3120,10 @@
             </div>
             <div
               class="port-name"
-              data-en="Módulo — Design Object Store"
-              data-pt="Módulo — Loja de Objetos de Design"
+              data-en="Módulo, Design Object Store"
+              data-pt="Módulo, Loja de Objetos de Design"
             >
-              Módulo — Design Object Store
+              Módulo, Design Object Store
             </div>
             <div class="port-loc">Curitiba, BR · 62m²</div>
             <div
@@ -2575,10 +3166,10 @@
             </div>
             <div
               class="port-name"
-              data-en="Kammer — Wine Bar & Kitchen"
-              data-pt="Kammer — Wine Bar & Cozinha"
+              data-en="Kammer, Wine Bar & Kitchen"
+              data-pt="Kammer, Wine Bar & Cozinha"
             >
-              Kammer — Wine Bar & Kitchen
+              Kammer, Wine Bar & Kitchen
             </div>
             <div class="port-loc">Berlin, DE · 85m²</div>
             <div
@@ -2608,17 +3199,17 @@
 
       <div class="port-cta">
         <p
-          data-en="<strong>Your project could be here.</strong> Generate a brief and implement it — submit your completed project for portfolio consideration."
-          data-pt="<strong>Seu projeto pode estar aqui.</strong> Gere um briefing e implemente — envie seu projeto concluído para consideração no portfólio."
+          data-en="<strong>Your project could be here.</strong> Generate a brief and implement it, submit your completed project for portfolio consideration."
+          data-pt="<strong>Seu projeto pode estar aqui.</strong> Gere um briefing e implemente, envie seu projeto concluído para consideração no portfólio."
         >
           <strong>Your project could be here.</strong> Generate a brief and
-          implement it — submit your completed project for portfolio
+          implement it, submit your completed project for portfolio
           consideration.
         </p>
         <a
-          href="#access"
+          href="#"
+          onclick="return goToHome('access')"
           class="btn-p"
-          onclick="showPage('home')"
           data-en="Start a brief"
           data-pt="Iniciar um briefing"
           >Start a brief</a
@@ -2632,10 +3223,10 @@
       <div class="art-header">
         <h2
           class="art-title"
-          data-en="Articles — <em>Spatial design intelligence.</em>"
-          data-pt="Artigos — <em>Inteligência em design espacial.</em>"
+          data-en="Articles: <em>Spatial design intelligence.</em>"
+          data-pt="Artigos: <em>Inteligência em design espacial.</em>"
         >
-          Articles — <em>Spatial design intelligence.</em>
+          Articles: <em>Spatial design intelligence.</em>
         </h2>
         <p
           class="art-sub"
@@ -2833,8 +3424,8 @@
             </div>
             <div
               class="art-card-excerpt"
-              data-en="A transparent look at how the platform works — what data it draws on, how inputs map to outputs, and where human judgment is still required."
-              data-pt="Uma visão transparente de como a plataforma funciona — em quais dados ela se baseia, como as entradas se mapeiam nas saídas e onde o julgamento humano ainda é necessário."
+              data-en="A transparent look at how the platform works, what data it draws on, how inputs map to outputs, and where human judgment is still required."
+              data-pt="Uma visão transparente de como a plataforma funciona, em quais dados ela se baseia, como as entradas se mapeiam nas saídas e onde o julgamento humano ainda é necessário."
             >
               A transparent look at how the platform works and where human
               judgment is still required.
@@ -3258,7 +3849,14 @@
 
     <!-- FOOTER (shared) -->
     <footer>
-      <div class="fl">OTELIE STUDIO</div>
+      <div class="footer-inner">
+      <div class="fl" style="display:flex;align-items:center;gap:8px;">
+        <svg width="18" height="24" viewBox="440 127 322 434" fill="none" aria-hidden="true">
+          <path d="M600 135 C516 135 448 203 448 287 L448 401 C448 485 516 553 600 553 L600 497 C547 497 504 454 504 401 L504 287 C504 234 547 191 600 191 C653 191 696 234 696 287 L696 385 C696 400 708 412 723 412 L752 412 L752 287 C752 203 684 135 600 135Z" fill="#D1A23A"/>
+          <path d="M642 444 L754 444 C754 490 716 527 669 527 C623 527 586 490 586 444 L642 444Z" fill="#1a1a1a"/>
+        </svg>
+        otelie
+      </div>
       <div class="social-links">
         <a
           href="https://instagram.com/otelie.design"
@@ -3270,11 +3868,11 @@
               d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"
             /></svg
         ></a>
-
       </div>
       <a href="mailto:studio@otelie.design" class="fc">studio@otelie.design</a>
       <div class="fc" data-en="© 2025 OTELIE" data-pt="© 2025 OTELIE">
         © 2025 OTELIE
+      </div>
       </div>
     </footer>
 
@@ -3298,18 +3896,35 @@
       }
       observeReveals();
 
+      // MOBILE NAV
+      function toggleMobNav() {
+        document.getElementById('mob-nav').classList.toggle('open');
+      }
+      function closeMobNav() {
+        document.getElementById('mob-nav').classList.remove('open');
+      }
+
       // PAGE ROUTING
       function showPage(id, linkEl) {
-        document
-          .querySelectorAll(".page")
-          .forEach((p) => p.classList.remove("active"));
+        document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
         document.getElementById("page-" + id).classList.add("active");
-        document
-          .querySelectorAll(".nav-links a")
-          .forEach((a) => a.classList.remove("active"));
+        document.querySelectorAll(".nav-links a, #mob-nav a").forEach((a) => a.classList.remove("active"));
         if (linkEl) linkEl.classList.add("active");
         window.scrollTo(0, 0);
+        closeMobNav();
         setTimeout(observeReveals, 100);
+      }
+
+      function goToHome(sectionId) {
+        const homeLink = document.querySelector('.nav-links a[data-en="Home"]');
+        showPage('home', homeLink);
+        if (sectionId) {
+          setTimeout(() => {
+            const el = document.getElementById(sectionId);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 120);
+        }
+        return false;
       }
 
       // PORTFOLIO FILTER
@@ -3342,8 +3957,8 @@
         document.documentElement.lang = l === "pt" ? "pt-BR" : "en";
         document.title =
           l === "pt"
-            ? "OTELIE Studio — Design Espacial com IA"
-            : "OTELIE Studio — AI Spatial Design";
+            ? "OTELIE Studio, Design Espacial com IA"
+            : "OTELIE Studio, AI Spatial Design";
         document.querySelectorAll("[data-en][data-pt]").forEach((el) => {
           el.innerHTML = l === "pt" ? el.dataset.pt : el.dataset.en;
         });
